@@ -4,7 +4,7 @@ using System.Collections;
 public class CameraManager : MonoBehaviour
 {
     public float scrollSpeed = 10.0f;
-    public int zoomMin = 5;
+    public int zoomMin = 1;
     public int zoomMax = 20000;
     float xSpeed = 5.0F;
     float ySpeed = 5.0F;
@@ -42,7 +42,7 @@ public class CameraManager : MonoBehaviour
 
         GestionarZoom();
 
-        Camera.main.farClipPlane = Vector3.Distance(transform.position, Vector3.zero) + 50;
+        Camera.main.farClipPlane = transform.position.magnitude + 50;
     }
 
     void GestionarZoom()

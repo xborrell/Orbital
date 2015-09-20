@@ -8,15 +8,17 @@ public class Satelite : MonoBehaviour
     public Vector3 VelocidadInicial;
 
     GameManager gameManager;
+    Transform childModel;
+    
     SateliteData data;
     CalculadorMovimiento calculadorMovimiento;
     CalculadorRotacion calculadorRotacion;
     MenteSatelite mente;
-    Transform childModel;
+    MotorSatelite motor;
 
-    public int Altura { get { return data.Altura; } }
-    public int Apoapsis { get { return data.Apoapsis; } }
-    public int Periapsis { get { return data.Periapsis; } }
+    public float Altura { get { return data.Altura; } }
+    public float Apoapsis { get { return data.Apoapsis; } }
+    public float Periapsis { get { return data.Periapsis; } }
     public float Inclinacion { get { return data.Inclinacion; } }
     public string Accion { get { return mente.Descripcion; } }
 
@@ -41,6 +43,7 @@ public class Satelite : MonoBehaviour
         calculadorMovimiento = new CalculadorMovimiento(data);
         calculadorRotacion = new CalculadorRotacion(data);
         mente = new MenteSatelite(data);
+        motor = new MotorSatelite(data);
     }
 
     // Use this for initialization
@@ -59,7 +62,7 @@ public class Satelite : MonoBehaviour
             }
         }
 
-        data.PosicionEnModelo = Conversor.RenderToModel(transform.position);
+        data.Posicion = transform.position;
         data.Velocidad = VelocidadInicial;
         data.Rotacion = childModel.transform.rotation;
     }
@@ -68,6 +71,7 @@ public class Satelite : MonoBehaviour
     void FixedUpdate()
     {
         mente.Update(Time.deltaTime);
+        motor.CalcularImpulso(Time.deltaTime);
 
         transform.position = calculadorMovimiento.CalcularNuevaPosicion(Time.deltaTime);
         childModel.transform.rotation = calculadorRotacion.CalcularNuevaRotacion(Time.deltaTime);

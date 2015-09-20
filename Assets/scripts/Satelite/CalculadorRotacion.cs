@@ -75,7 +75,7 @@ public class CalculadorRotacion
 
     Quaternion CalcularRotacionATierra()
     {
-        Vector3 forward = _data.PosicionEnModelo;
+        Vector3 forward = _data.Posicion;
         forward.Normalize();
         forward *= -1;
 
@@ -91,7 +91,7 @@ public class CalculadorRotacion
         Vector3 forward = _data.Velocidad;
         forward.Normalize();
 
-        Vector3 upward = _data.PosicionEnModelo;
+        Vector3 upward = _data.Posicion;
         upward.Normalize();
 
         return Quaternion.LookRotation(forward, upward);
