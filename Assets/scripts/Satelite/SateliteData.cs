@@ -8,7 +8,6 @@ public class SateliteData
     public Vector3 Posicion;
     public Vector3 Orientacion;
     public Vector3 Camara;
-    public Quaternion Rotacion;
     public ActitudRotacion Actitud = ActitudRotacion.CaidaLibre;
     public ActitudRotacion ActitudSolicitada = ActitudRotacion.Ninguna;
     public float Impulso = 0;
@@ -20,7 +19,7 @@ public class SateliteData
     public float SemiejeMayor { get { return (Apoapsis + Periapsis) / 2; } }
     public bool? OrbitaSubiendo { get; set; }
 
-    public int Altura
+    public float Altura
     {
         get
         {
@@ -29,7 +28,7 @@ public class SateliteData
                 float alturaAbsoluta = Posicion.magnitude;
                 float alturaSobreElSuelo = alturaAbsoluta - Config.EarthRadius;
 
-                return (int)Math.Round(alturaSobreElSuelo, 0);
+                return alturaSobreElSuelo;
             }
 
             return -1;
@@ -86,9 +85,9 @@ public class SateliteData
         Orientacion = new Vector3(Config.GetRandomValue(1, 10), Config.GetRandomValue(1, 10), Config.GetRandomValue(1, 10));
         Orientacion.Normalize();
         
-        Camara = new Vector3(-posicion.x, -posicion.y, -posicion.z);
+        Camara = new Vector3(posicion.x, posicion.y, posicion.z);
         Camara.Normalize();
-        Camara = Camara * 5;
+        Camara = Camara * 10;
 
         InvalidateOrbitalValues();
     }

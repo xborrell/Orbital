@@ -47,10 +47,10 @@ public class Satelite
 
     public void FixedUpdate()
     {
-        //mente.Update(Time.deltaTime);
+        mente.Update(Time.deltaTime);
         //motor.CalcularImpulso(Time.deltaTime);
 
-        //calculadorMovimiento.CalcularNuevaPosicion(Time.deltaTime);
-        //calculadorRotacion.CalcularNuevaRotacion(Time.deltaTime);
+        calculadorMovimiento.CalcularNuevaPosicion(Time.deltaTime);
+        calculadorRotacion.CalcularNuevaRotacion(Time.deltaTime);
     }
 }

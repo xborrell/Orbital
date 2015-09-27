@@ -10,24 +10,24 @@ public class ManiobraRotacion
     private const float velocidadAngularEnGradosPorSegundo = 10.0F;
     private float tiempoParaFinalizarEnSegundos;
     private float tiempoTranscurridoEnSegundos;
-    Quaternion rotacionInicial;
-    Quaternion rotacionFinal;
+    Vector3 orientacionInicial;
+    Vector3 orientacionFinal;
 
-    public ManiobraRotacion( ActitudRotacion actitudDestino, SateliteData data, Quaternion rotacion)
+    public ManiobraRotacion(ActitudRotacion actitudDestino, SateliteData data, Vector3 orientacionSolicitada)
     {
         SiguienteActitud = actitudDestino;
 
-        rotacionInicial = data.Rotacion;
-        rotacionFinal = rotacion;
+        orientacionInicial = data.Orientacion;
+        orientacionFinal = orientacionSolicitada;
 
-        var anguloEnGrados = Quaternion.Angle(rotacionInicial, rotacionFinal);
+        var anguloEnGrados = Vector3.Angle( orientacionInicial, orientacionFinal);
 
         tiempoParaFinalizarEnSegundos = anguloEnGrados / velocidadAngularEnGradosPorSegundo;
     }
 
-    public Quaternion CalcularNuevaRotacion(float deltaTime)
+    public Vector3 CalcularNuevaOrientacion(float deltaTime)
     {
-        Quaternion rotacionCalculada;
+        Vector3 orientacionCalculada;
 
         if (!ManiobraCompletada)
         {
@@ -35,15 +35,15 @@ public class ManiobraRotacion
 
             var porcentajeDeRotacion = Math.Min(tiempoTranscurridoEnSegundos / tiempoParaFinalizarEnSegundos, 1);
 
-            rotacionCalculada = Quaternion.Lerp(rotacionInicial, rotacionFinal, porcentajeDeRotacion);
+            orientacionCalculada = Vector3.Lerp(orientacionInicial, orientacionFinal, porcentajeDeRotacion);
 
             ManiobraCompletada = porcentajeDeRotacion == 1;
         }
         else
         {
-            rotacionCalculada = rotacionFinal;
+            orientacionCalculada = orientacionFinal;
         }
 
-        return rotacionCalculada;
+        return orientacionCalculada;
     }
 }

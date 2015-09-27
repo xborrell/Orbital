@@ -7,7 +7,7 @@ public class CalcularPeriapsis : DecisionCompleja
 {
     public override string Descripcion
     {
-        get { return "Calculando Periapsis"; }
+        get { return "Calc. Periapsis"; }
     }
 
     float alturaAnterior;

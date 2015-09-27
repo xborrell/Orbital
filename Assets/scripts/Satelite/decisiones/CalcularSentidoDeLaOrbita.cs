@@ -7,7 +7,7 @@ public class CalcularSentidoDeLaOrbita : DecisionCompleja
 {
     public override string Descripcion
     {
-        get { return "Calculando el sentido de la orbita."; }
+        get { return "Calc. sentido orbita."; }
     }
 
     float alturaAnterior;

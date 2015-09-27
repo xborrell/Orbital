@@ -8,7 +8,7 @@ public class CalcularInclinacion : DecisionCompleja
 {
     public override string Descripcion
     {
-        get { return "Calculando Inclinacion"; }
+        get { return "Calc. Inclinacion"; }
     }
 
     Vector3 posicionAnterior;

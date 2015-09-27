@@ -8,7 +8,7 @@ public class AlturaUpdater : AbstractUpdater
 {
     void Update()
     {
-        var altura = gameManager.SateliteSeleccionado.Altura;
-        campo.text = altura == 0 ? "Desconocido" : altura.ToString("#,0 m.");
+        var data = gameManager.SateliteSeleccionado.Altura;
+        campo.text = data < 0 ? "Desconocido" : string.Format("{0} Km.", data.ToString("N3"));
     }
 }

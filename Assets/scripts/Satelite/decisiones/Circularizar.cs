@@ -9,7 +9,7 @@ public class Circularizar : DecisionCompleja
 
     public override string Descripcion
     {
-        get { return "Circularizar la orbita."; }
+        get { return "Circularizar orbita."; }
     }
 
     public override bool DebeActuar()

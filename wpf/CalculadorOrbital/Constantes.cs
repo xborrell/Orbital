@@ -9,7 +9,7 @@ namespace CalculadorOrbital
         public const float RadianToDegreeCoeficient = 180 / (float)Math.PI;
         public const float DegreeToRadianCoeficient = (float)Math.PI / 180;
         public const float Pi2 = (float)(2 * Math.PI);
-        public const float ConstanteGravitacionUniversal = 6.674E-11F;
+        public const float ConstanteGravitacionUniversal = 6.674E-11F; //6,6722464010713090056913290927352e-20
         public const float EarthRadius = 6378.280F; // KM
         public const float EarthMass = 5.974E24F; // KG
         public const float SatellitMass = 750F; // KG

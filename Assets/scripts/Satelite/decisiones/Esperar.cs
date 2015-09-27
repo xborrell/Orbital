@@ -7,7 +7,7 @@ public class Esperar : Decision
 {
     public override string Descripcion
     {
-        get { return string.Format("Esperando {0:0.00} segundos", tiempoDeEspera); }
+        get { return "Esperando"; }
     }
 
     float tiempoDeEspera = 5.0F;
@@ -20,6 +20,13 @@ public class Esperar : Decision
     }
 
     public Esperar(SateliteData data) : base(data) { }
+
+    override public void Inicializar()
+    {
+        base.Inicializar();
+        tiempoTranscurrido = 0;
+    }
+
 
     override public void Actua(float deltaTime)
     {

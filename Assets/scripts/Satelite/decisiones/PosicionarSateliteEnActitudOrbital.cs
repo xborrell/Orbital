@@ -5,7 +5,7 @@ using System.Text;
 
 public class IniciarSatelite : Decision
 {
-    public override string Descripcion { get { return "Situando en actitud orbital"; } }
+    public override string Descripcion { get { return "Ir a Actitud orbital"; } }
 
     public IniciarSatelite(SateliteData data) : base(data) { }
 
