@@ -8,7 +8,7 @@ public class ApoapsisUpdater : AbstractUpdater
 {
     void Update()
     {
-        var apoapsis = sateliteSelector.satelite.Apoapsis;
+        var apoapsis = gameManager.SateliteSeleccionado.Apoapsis;
         campo.text = apoapsis == 0 ? "Desconocido" : apoapsis.ToString("#,0 m.");
     }
 }

@@ -6,6 +6,8 @@ public class SateliteData
 {
     public Vector3 Velocidad;
     public Vector3 Posicion;
+    public Vector3 Orientacion;
+    public Vector3 Camara;
     public Quaternion Rotacion;
     public ActitudRotacion Actitud = ActitudRotacion.CaidaLibre;
     public ActitudRotacion ActitudSolicitada = ActitudRotacion.Ninguna;
@@ -42,7 +44,7 @@ public class SateliteData
             {
                 Vector3 referencia = new Vector3(Posicion.x, 0, Posicion.z);
 
-                return (float)Vector3.AngleBetween(referencia, Posicion);
+                return (float)Vector3.Angle(referencia, Posicion);
             }
 
             return -1;
@@ -57,7 +59,7 @@ public class SateliteData
             {
                 Vector3 referencia = new Vector3(0, Posicion.y, Posicion.z);
 
-                return (float)Vector3.AngleBetween(referencia, Posicion);
+                return (float)Vector3.Angle(referencia, Posicion);
             }
 
             return -1;
@@ -76,8 +78,18 @@ public class SateliteData
         }
     }
 
-    public SateliteData()
+    public SateliteData(Vector3 posicion, Vector3 velocidad)
     {
+        Velocidad = velocidad;
+        Posicion = posicion;
+        
+        Orientacion = new Vector3(Config.GetRandomValue(1, 10), Config.GetRandomValue(1, 10), Config.GetRandomValue(1, 10));
+        Orientacion.Normalize();
+        
+        Camara = new Vector3(-posicion.x, -posicion.y, -posicion.z);
+        Camara.Normalize();
+        Camara = Camara * 5;
+
         InvalidateOrbitalValues();
     }
 

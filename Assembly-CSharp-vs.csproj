@@ -46,13 +46,15 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\scripts\CameraManager.cs" />
+     <Compile Include="Assets\scripts\CamaraATierra.cs" />
+     <Compile Include="Assets\scripts\CameraMaster.cs" />
      <Compile Include="Assets\scripts\Config.cs" />
      <Compile Include="Assets\scripts\GameManager.cs" />
-     <Compile Include="Assets\scripts\LightManager.cs" />
+     <Compile Include="Assets\scripts\RotacionTerrestre.cs" />
      <Compile Include="Assets\scripts\Satelite\ActitudRotacion.cs" />
      <Compile Include="Assets\scripts\Satelite\CalculadorMovimiento.cs" />
      <Compile Include="Assets\scripts\Satelite\CalculadorRotacion.cs" />
+     <Compile Include="Assets\scripts\Satelite\Conversor.cs" />
      <Compile Include="Assets\scripts\Satelite\ConversorOrbital.cs" />
      <Compile Include="Assets\scripts\Satelite\ManiobraRotacion.cs" />
      <Compile Include="Assets\scripts\Satelite\MenteSatelite.cs" />
@@ -60,6 +62,7 @@
      <Compile Include="Assets\scripts\Satelite\OrbitalElements.cs" />
      <Compile Include="Assets\scripts\Satelite\Satelite.cs" />
      <Compile Include="Assets\scripts\Satelite\SateliteData.cs" />
+     <Compile Include="Assets\scripts\Satelite\SateliteRender.cs" />
      <Compile Include="Assets\scripts\Satelite\decisiones\CalcularApoapsis.cs" />
      <Compile Include="Assets\scripts\Satelite\decisiones\CalcularInclinacion.cs" />
      <Compile Include="Assets\scripts\Satelite\decisiones\CalcularPeriapsis.cs" />
@@ -76,11 +79,14 @@
      <Compile Include="Assets\scripts\Updaters\AlturaRealUpdater.cs" />
      <Compile Include="Assets\scripts\Updaters\AlturaUpdater.cs" />
      <Compile Include="Assets\scripts\Updaters\ApoapsisUpdater.cs" />
+     <Compile Include="Assets\scripts\Updaters\CamaraMaestraUpdater.cs" />
      <Compile Include="Assets\scripts\Updaters\EscalaTemporalUpdater.cs" />
      <Compile Include="Assets\scripts\Updaters\InclinacionUpdater.cs" />
      <Compile Include="Assets\scripts\Updaters\NombreUpdater.cs" />
      <Compile Include="Assets\scripts\Updaters\PeriapsisUpdater.cs" />
+     <Compile Include="Assets\scripts\Updaters\PosicioRealUpdater.cs" />
      <Compile Include="Assets\scripts\Updaters\TiempoTotalUpdater.cs" />
+     <Compile Include="Assets\scripts\Updaters\VelocitatRealUpdater.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

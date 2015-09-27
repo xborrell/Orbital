@@ -8,7 +8,7 @@ public class PeriapsisUpdater : AbstractUpdater
 {
     void Update()
     {
-        var periapsis = sateliteSelector.satelite.Periapsis;
+        var periapsis = gameManager.SateliteSeleccionado.Periapsis;
         campo.text = periapsis == 0 ? "Desconocido" : periapsis.ToString("#,0 m.");
     }
 }

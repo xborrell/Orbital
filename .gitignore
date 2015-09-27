@@ -209,9 +209,9 @@ FakesAssemblies/
 # LightSwitch generated files
 GeneratedArtifacts/
 _Pvt_Extensions/
+
 ModelManifest.xml
 /Library/metadata
 /Library/ShaderCache
 Library/ShaderCache.db
-/Temp/ProcessJobs
-/Temp/UnityLockfile
+/Temp/

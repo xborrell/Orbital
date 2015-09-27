@@ -13,4 +13,10 @@ public static class Config
     public const float RadianToDegreeCoeficient = 180 / (float)Math.PI;
     public const float DegreeToRadianCoeficient = (float)Math.PI / 180;
     public const float Pi2 = (float)(2 * Math.PI);
+
+    static Random randomGenerator = new Random();
+    public static float GetRandomValue(int minValue, int maxValue)
+    {
+        return randomGenerator.Next(minValue, maxValue);
+    }
 }

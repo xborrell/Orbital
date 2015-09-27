@@ -13,7 +13,7 @@ public class CalculadorRotacion
         _data = data;
     }
 
-    public Quaternion CalcularNuevaRotacion(float deltaTime)
+    public void CalcularNuevaRotacion(float deltaTime)
     {
         if (_data.ActitudSolicitada != ActitudRotacion.Ninguna)
         {
@@ -34,8 +34,6 @@ public class CalculadorRotacion
             case ActitudRotacion.Orbital: _data.Rotacion = CalcularRotacionOrbital(); break;
             default: throw new ArgumentException("Actitud no implementada en CalculadorRotacion2");
         }
-
-        return _data.Rotacion;
     }
 
     private void GestionarCambioDeRotacion()
