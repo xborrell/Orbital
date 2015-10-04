@@ -20,54 +20,28 @@ public class CalcularSentidoDeLaOrbita : DecisionCompleja
     public CalcularSentidoDeLaOrbita(SateliteData data)
         : base(data)
     {
-        DefinirPaso(SolicitarEnfoqueATierra);
-        DefinirPaso(ComprobarEnfoqueCorrecto);
-        DefinirPaso(TomarAltura);
-        DefinirPaso(EsperarIntervaloParaCompararDatos);
-        DefinirPaso(ComprobarSiLaOrbitaSubeOBaja);
+        DefinirPaso(new PasoEnfoqueATierra(data));
+        DefinirPaso(new PasoComprobarEnfoque(data, ActitudRotacion.EnfocadoATierra));
+        DefinirPaso(new PasoTomarAltura(data));
+        DefinirPaso(new PasoEsperar(data, 5, "Esperando Para Evaluar el Sentido"));
+        DefinirPaso(new PasoGenerico(data,"Comprobando el Sentido de la Órbita", ComprobarSiLaOrbitaSubeOBaja));
     }
 
-    void SolicitarEnfoqueATierra(float deltaTime)
-    {
-        Data.ActitudSolicitada = ActitudRotacion.EnfocadoATierra;
-        PasoCompletado();
-    }
-
-    void ComprobarEnfoqueCorrecto(float deltaTime)
-    {
-        if (Data.Actitud == ActitudRotacion.EnfocadoATierra)
-        {
-            PasoCompletado();
-        }
-    }
-
-    void TomarAltura(float deltaTime)
-    {
-        alturaAnterior = Data.Altura;
-        PasoCompletado();
-    }
-
-    void EsperarIntervaloParaCompararDatos(float deltaTime)
-    {
-        PasoCompletado();
-        SolicitarEspera(5);
-    }
-
-    void ComprobarSiLaOrbitaSubeOBaja(float deltaTime)
+    bool ComprobarSiLaOrbitaSubeOBaja(float deltaTime)
     {
         if (alturaAnterior > Data.Altura)
         {
-            PasoCompletado();
             Data.OrbitaSubiendo = false;
+            return true;
         }
-        else if (alturaAnterior < Data.Altura)
+
+        if (alturaAnterior < Data.Altura)
         {
-            PasoCompletado();
             Data.OrbitaSubiendo = true;
+            return true;
         }
-        else
-        {
-            SolicitarEspera(5);
-        }
+
+        SolicitarEspera(5);
+        return false;
     }
 }

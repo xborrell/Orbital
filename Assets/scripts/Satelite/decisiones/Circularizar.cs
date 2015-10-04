@@ -2,10 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 public class Circularizar : DecisionCompleja
 {
+    ActitudRotacion actitudSolicitada;
     const float margenDeCircularización = 0.1F;
+    float impulsoNecesario;
+    float duracionDelImpulsoEnSegundos;
+    float marcaDeTiempo;
+    float duracionDeMediaOrbita;
+    float nuevaVelocidad;
 
     public override string Descripcion
     {
@@ -16,71 +23,99 @@ public class Circularizar : DecisionCompleja
     {
         return (Data.Periapsis > 0)
             && (Data.Apoapsis > 0)
-            && (Math.Abs(Data.Apoapsis - Data.Periapsis) < margenDeCircularización);
+            && (Math.Abs(Data.Apoapsis - Data.Periapsis) > margenDeCircularización);
     }
 
     public Circularizar(SateliteData data)
         : base(data)
     {
-        DefinirPaso(SolicitarEnfoqueOrbital);
-        DefinirPaso(ComprobarEnfoqueCorrecto);
-        DefinirPaso(CalcularValoresDelImpulso);
-        DefinirPaso(CalcularMomentoDeIgnicion);
-        DefinirPaso(EsperarMomentoDeIgnicion);
-        DefinirPaso(EncenderMotor);
-        DefinirPaso(EsperarDuracionDelImpulso);
-        DefinirPaso(ApagarMotor);
-        DefinirPaso(ResetearValoresOrbitales);
+        DefinirPaso(new PasoGenerico(data,"Calcular valor del Impulso", CalcularValoresDelImpulso));
+        DefinirPaso(new PasoEnfoqueATierra(data));
+        DefinirPaso(new PasoComprobarEnfoque(data, ActitudRotacion.EnfocadoATierra));
+        DefinirPaso(new PasoTomarAltura(data));
+        DefinirPaso(new PasoEsperarPeriapsis(data));
+        DefinirPaso(new PasoEsperarApoapsis(data));
+        DefinirPaso(new PasoGenerico(data, "Cambiar velocidad", CambiarVelocidad));
+
+        //DefinirPaso(new Paso( "", EsperarPeriapsis));
+        //DefinirPaso(new Paso( "", SolicitarEnfoqueOrbital));
+        //DefinirPaso(new Paso( "", ComprobarEnfoqueCorrecto));
+        //DefinirPaso(new Paso( "", EsperarMomentoDeIgnicion));
+        //DefinirPaso(new Paso( "", EncenderMotor));
+        //DefinirPaso(new Paso( "", EsperarDuracionDelImpulso));
+        //DefinirPaso(new Paso( "", ApagarMotor));
+        DefinirPaso(new PasoGenerico(data, "Resetear valores orbitales", ResetearValoresOrbitales));
     }
 
-    void SolicitarEnfoqueOrbital(float deltaTime)
+    private bool CambiarVelocidad(float delta)
     {
-        Data.ActitudSolicitada = ActitudRotacion.Orbital;
-        PasoCompletado();
+        Data.Velocidad.Normalize();
+        Data.Velocidad *= nuevaVelocidad;
+
+        return true;
     }
 
-    void ComprobarEnfoqueCorrecto(float deltaTime)
+    public override void Inicializar()
     {
-        if (Data.Actitud == ActitudRotacion.Orbital)
-        {
-            PasoCompletado();
-        }
+        base.Inicializar();
+
+        impulsoNecesario = -1;
     }
 
-    void CalcularValoresDelImpulso(float deltaTime)
+    bool CalcularValoresDelImpulso(float deltaTime)
     {
-        PasoCompletado();
+        double radioPeriapsis = Data.Periapsis + Config.EarthRadius;
+        double radioApoapsis = Data.Apoapsis + Config.EarthRadius;
+        double compartido = Math.Sqrt(Config.Mu * 2);
+        double momentoAngularActual = compartido * Math.Sqrt((radioApoapsis * radioPeriapsis) / (radioApoapsis + radioPeriapsis));
+        double momentoAngularDeseado = compartido * Math.Sqrt((radioApoapsis * radioApoapsis) / (radioApoapsis + radioApoapsis));
+        double velocidadActualenApoapsis = momentoAngularActual / radioApoapsis;
+        double velocidadDeseadaEnApoapsis = momentoAngularDeseado / radioApoapsis;
+
+        nuevaVelocidad = (float)velocidadDeseadaEnApoapsis;
+
+        impulsoNecesario = (float)(velocidadDeseadaEnApoapsis - velocidadActualenApoapsis);
+        duracionDelImpulsoEnSegundos = impulsoNecesario / Config.ImpulsoMaximo;
+
+        if (duracionDelImpulsoEnSegundos > 5) duracionDelImpulsoEnSegundos = 5;
+
+        return true;
     }
 
-    void CalcularMomentoDeIgnicion(float deltaTime)
+    bool EsperarMomentoDeIgnicion(float deltaTime)
     {
-        PasoCompletado();
+        float tiempoYaGastado = Time.time - marcaDeTiempo;
+        float tiempoAntesDeApoapsisParaIgnicion = duracionDelImpulsoEnSegundos / 2;
+        float tiempoAEsperar = duracionDeMediaOrbita - tiempoYaGastado - tiempoAntesDeApoapsisParaIgnicion;
+
+        SolicitarEspera(tiempoAEsperar);
+
+        return true;
     }
 
-    void EsperarMomentoDeIgnicion(float deltaTime)
+    bool EncenderMotor(float deltaTime)
     {
-        PasoCompletado();
-        SolicitarEspera(15);
+        Data.ImpulsoSolicitado = Config.ImpulsoMaximo;
+        return true;
     }
 
-    void EncenderMotor(float deltaTime)
+    bool EsperarDuracionDelImpulso(float deltaTime)
     {
-        PasoCompletado();
+        SolicitarEspera(duracionDelImpulsoEnSegundos);
+        return true;
     }
 
-    void EsperarDuracionDelImpulso(float deltaTime)
+    bool ApagarMotor(float deltaTime)
     {
-        PasoCompletado();
+        Data.ImpulsoSolicitado = 0;
+
+        return true;
     }
 
-    void ApagarMotor(float deltaTime)
-    {
-        PasoCompletado();
-    }
-
-    void ResetearValoresOrbitales(float deltaTime)
+    bool ResetearValoresOrbitales(float deltaTime)
     {
         Data.InvalidateOrbitalValues();
-        PasoCompletado();
+        
+        return true;
     }
 }

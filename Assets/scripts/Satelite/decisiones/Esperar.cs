@@ -7,7 +7,12 @@ public class Esperar : Decision
 {
     public override string Descripcion
     {
-        get { return "Esperando"; }
+        get { return string.Format( "Esperando {0} segundos", tiempoDeEspera ); }
+    }
+
+    public override string AccionEnCurso
+    {
+        get { return string.Format("Faltan {0} segundos", tiempoTranscurrido); }
     }
 
     float tiempoDeEspera = 5.0F;

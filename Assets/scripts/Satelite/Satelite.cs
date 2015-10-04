@@ -20,6 +20,7 @@ public class Satelite
     public float Inclinacion { get { return data.Inclinacion; } }
     public string Accion { get { return mente.Descripcion; } }
     public SateliteData Data { get { return data; } }
+    public MenteSatelite Mente { get { return mente; } }
 
     public string Actitud
     {
@@ -48,7 +49,7 @@ public class Satelite
     public void FixedUpdate()
     {
         mente.Update(Time.deltaTime);
-        //motor.CalcularImpulso(Time.deltaTime);
+        motor.CalcularImpulso(Time.deltaTime);
 
         calculadorMovimiento.CalcularNuevaPosicion(Time.deltaTime);
         calculadorRotacion.CalcularNuevaRotacion(Time.deltaTime);

@@ -20,44 +20,10 @@ public class CalcularPeriapsis : DecisionCompleja
     public CalcularPeriapsis(SateliteData data)
         : base(data)
     {
-        DefinirPaso(SolicitarEnfoqueATierra);
-        DefinirPaso(ComprobarEnfoqueCorrecto);
-        DefinirPaso(TomarAltura);
-        DefinirPaso(Calcular);
-    }
-
-    void SolicitarEnfoqueATierra(float deltaTime)
-    {
-        Data.ActitudSolicitada = ActitudRotacion.EnfocadoATierra;
-        PasoCompletado();
-    }
-
-    void ComprobarEnfoqueCorrecto(float deltaTime)
-    {
-        if (Data.Actitud == ActitudRotacion.EnfocadoATierra)
-        {
-            PasoCompletado();
-        }
-    }
-
-    void TomarAltura(float deltaTime)
-    {
-        alturaAnterior = Data.Altura;
-        PasoCompletado();
-    }
-
-    void Calcular(float deltaTime)
-    {
-        if (alturaAnterior < Data.Altura)
-        {
-            Data.Periapsis = alturaAnterior;
-            Data.OrbitaSubiendo = null;
-            PasoCompletado();
-        }
-        else
-        {
-            alturaAnterior = Data.Altura;
-            SolicitarEspera(30);
-        }
+        DefinirPaso(new PasoEnfoqueATierra(data));
+        DefinirPaso(new PasoComprobarEnfoque(data, ActitudRotacion.EnfocadoATierra));
+        DefinirPaso(new PasoTomarAltura(data));
+        DefinirPaso(new PasoEsperarPeriapsis(data));
+        DefinirPaso(new PasoGenerico(data, "Registrando Periapsis", x => { Data.Periapsis = Data.AlturaDeReferencia; return true; }));
     }
 }

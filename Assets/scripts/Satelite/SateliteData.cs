@@ -12,6 +12,7 @@ public class SateliteData
     public ActitudRotacion ActitudSolicitada = ActitudRotacion.Ninguna;
     public float Impulso = 0;
     public float ImpulsoSolicitado = -1;
+    public float AlturaDeReferencia;
 
     public float Apoapsis { get; set; }
     public float Periapsis { get; set; }
@@ -90,6 +91,9 @@ public class SateliteData
         Camara = Camara * 10;
 
         InvalidateOrbitalValues();
+
+        //Apoapsis = 408.384766F;
+        //Periapsis = 397.3208F;
     }
 
     public void InvalidateOrbitalValues()

@@ -9,6 +9,7 @@ abstract public class Decision
     protected SateliteData Data { get; set; }
 
     abstract public string Descripcion { get; }
+    abstract public string AccionEnCurso { get; }
     abstract public bool DebeActuar();
     abstract public void Actua(float deltaTime);
 

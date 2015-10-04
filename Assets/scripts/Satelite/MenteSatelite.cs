@@ -7,7 +7,8 @@ using UnityEngine;
 public class MenteSatelite
 {
     List<Decision> decisiones;
-    Decision decisionEnCurso;
+    public Decision decisionEnCurso { get; protected set; }
+    SateliteData data;
 
     public string Descripcion
     {
@@ -19,15 +20,18 @@ public class MenteSatelite
 
     public MenteSatelite(SateliteData data)
     {
+        this.data = data;
+
         decisiones = new List<Decision>() {
                 new CalcularSentidoDeLaOrbita(data),
                 new CalcularApoapsis(data),
                 new CalcularPeriapsis(data),
                 new CalcularInclinacion(data),
                 new Circularizar(data),
-                new IniciarSatelite(data),
+                new PosicionarSateliteEnActitudOrbital(data),
                 new Esperar(data, 60F),
             };
+        ObtieneLaSiguienteDecision();
     }
 
     internal void Update(float deltaTime)
@@ -58,6 +62,9 @@ public class MenteSatelite
     private void FinalizaDecision()
     {
         decisionEnCurso = null;
+
+        if (data.Actitud != ActitudRotacion.CaidaLibre)
+            data.ActitudSolicitada = ActitudRotacion.CaidaLibre;
     }
 }
 

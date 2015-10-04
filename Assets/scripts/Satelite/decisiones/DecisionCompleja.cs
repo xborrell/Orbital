@@ -3,15 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public delegate void Paso(float delta);
-
 abstract public class DecisionCompleja : Decision
 {
     private List<Paso> pasosAEjecutar = new List<Paso>();
     private List<Paso> DefinicionDePasos = new List<Paso>();
-    private float marcaDeTiempo;
 
     public DecisionCompleja(SateliteData data) : base(data) { }
+    override public string AccionEnCurso
+    {
+        get
+        {
+            int index = 0;
+
+            while (index < pasosAEjecutar.Count)
+            {
+                if (!string.IsNullOrEmpty(pasosAEjecutar[index].Titulo))
+                    return pasosAEjecutar[index].Titulo;
+
+                index++;
+            }
+
+            return string.Empty;
+        }
+    }
 
     override public void Inicializar()
     {
@@ -27,36 +41,30 @@ abstract public class DecisionCompleja : Decision
 
     override public void Actua(float deltaTime)
     {
-        if (pasosAEjecutar.Count == 0)
-            DecisionFinalizada = true;
+        while (pasosAEjecutar[0].PasoFinalizado)
+        {
+            pasosAEjecutar.RemoveAt(0);
 
-        else
-            pasosAEjecutar[0](deltaTime);
-    }
+            if (pasosAEjecutar.Count == 0)
+            {
+                DecisionFinalizada = true;
+                return;
+            }
+        }
 
-    protected void CambiarPaso(Paso paso)
-    {
-        pasosAEjecutar[0] = paso;
-    }
+        pasosAEjecutar[0].Ejecutar(deltaTime);
 
-    protected void PasoCompletado()
-    {
-        pasosAEjecutar.RemoveAt(0);
+        var segundosAEsperar = pasosAEjecutar[0].SegundosAEsperar;
+
+        if (segundosAEsperar > 0)
+        {
+            pasosAEjecutar.Insert(0, new PasoEsperar(Data, segundosAEsperar));
+            pasosAEjecutar[0].SegundosAEsperar = 0;
+        }
     }
 
     protected void SolicitarEspera(float segundosAEsperar)
     {
-        marcaDeTiempo = segundosAEsperar;
-        pasosAEjecutar.Insert(0, Esperar);
-    }
-
-    void Esperar(float deltaTime)
-    {
-        marcaDeTiempo -= deltaTime;
-
-        if (marcaDeTiempo < 0)
-        {
-            PasoCompletado();
-        }
+        pasosAEjecutar.Insert(0, new PasoEsperar(Data, segundosAEsperar));
     }
 }

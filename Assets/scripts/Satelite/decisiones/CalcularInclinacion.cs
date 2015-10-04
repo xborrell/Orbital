@@ -21,31 +21,17 @@ public class CalcularInclinacion : DecisionCompleja
     public CalcularInclinacion(SateliteData data)
         : base(data)
     {
-        DefinirPaso(SolicitarEnfoqueATierra);
-        DefinirPaso(ComprobarEnfoqueCorrecto);
-        DefinirPaso(Calcular);
+        DefinirPaso(new PasoEnfoqueATierra(data));
+        DefinirPaso(new PasoComprobarEnfoque(data, ActitudRotacion.EnfocadoATierra));
+        DefinirPaso(new PasoGenerico(data, "Calcular la inclinación", Calcular));
     }
 
-    void SolicitarEnfoqueATierra(float deltaTime)
-    {
-        Data.ActitudSolicitada = ActitudRotacion.EnfocadoATierra;
-        PasoCompletado();
-    }
-
-    void ComprobarEnfoqueCorrecto(float deltaTime)
-    {
-        if (Data.Actitud == ActitudRotacion.EnfocadoATierra)
-        {
-            PasoCompletado();
-        }
-    }
-
-    void Calcular(float deltaTime)
+    bool Calcular(float deltaTime)
     {
         var conversor = new ConversorOrbital();
         OrbitalElements elementos = conversor.Convertir(Data.Posicion, Data.Velocidad);
 
         Data.Inclinacion = elementos.Inclination;
-        PasoCompletado();
+        return true;
     }
 }

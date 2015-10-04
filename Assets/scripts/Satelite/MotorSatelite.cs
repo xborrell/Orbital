@@ -6,8 +6,6 @@ using System.Text;
 public class MotorSatelite
 {
     SateliteData data;
-    const float maximoImpulso = 10F;      // m/s2
-    const float maximaVariacionImpulso = 14F;            // m/s2
     Action<float> variacionImpulso = null;
 
     public MotorSatelite(SateliteData data)
@@ -17,7 +15,7 @@ public class MotorSatelite
 
     public void FullPower()
     {
-        CambioDeImpulso(maximoImpulso);
+        CambioDeImpulso(Config.ImpulsoMaximo);
     }
     public void Stop()
     {
@@ -28,8 +26,8 @@ public class MotorSatelite
     {
         data.ImpulsoSolicitado = -1;
 
-        if (cambioDeImpulsoPedido > maximoImpulso)
-            cambioDeImpulsoPedido = maximoImpulso;
+        if (cambioDeImpulsoPedido > Config.ImpulsoMaximo)
+            cambioDeImpulsoPedido = Config.ImpulsoMaximo;
 
         else if (cambioDeImpulsoPedido < 0)
             cambioDeImpulsoPedido = 0;
@@ -60,7 +58,7 @@ public class MotorSatelite
 
     void Acelerar(float deltaTime, float aceleracionSolicitada)
     {
-        var variacion = maximaVariacionImpulso * deltaTime;
+        var variacion = Config.VariacionMaximaDelImpulso * deltaTime;
 
         data.Impulso += variacion;
 
@@ -73,7 +71,7 @@ public class MotorSatelite
 
     void Frenar(float deltaTime, float frenadoSolicitado)
     {
-        var variacion = maximaVariacionImpulso * deltaTime;
+        var variacion = Config.VariacionMaximaDelImpulso * deltaTime;
 
         data.Impulso -= variacion;
 

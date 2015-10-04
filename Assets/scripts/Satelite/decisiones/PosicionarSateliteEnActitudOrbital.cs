@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class IniciarSatelite : Decision
+public class PosicionarSateliteEnActitudOrbital : DecisionCompleja
 {
-    public override string Descripcion { get { return "Ir a Actitud orbital"; } }
-
-    public IniciarSatelite(SateliteData data) : base(data) { }
-
-    override public void Actua(float deltaTime)
+    public override string Descripcion
     {
-        if ((Data.Actitud != ActitudRotacion.Orbital) && (Data.Actitud != ActitudRotacion.Maniobrando))
-        {
-            Data.ActitudSolicitada = ActitudRotacion.Orbital;
-        }
-
-        DecisionFinalizada = Data.Actitud == ActitudRotacion.Orbital;
+        get { return "Posicionar Satelite en Actitud Orbital"; }
+    }
+    public override string AccionEnCurso
+    {
+        get { return "Maniobrando"; }
+    }
+    public PosicionarSateliteEnActitudOrbital(SateliteData data) : base(data) { 
+        DefinirPaso(new PasoEnfoqueOrbital(data));
+        DefinirPaso(new PasoComprobarEnfoque(data, ActitudRotacion.Orbital));
     }
 
     public override bool DebeActuar()
