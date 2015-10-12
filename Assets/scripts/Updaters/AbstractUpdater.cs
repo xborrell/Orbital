@@ -7,27 +7,25 @@ using System;
 public class AbstractUpdater : MonoBehaviour
 {
     protected Text campo;
-    protected SateliteSelector sateliteSelector;
+    protected GameManager gameManager;
 
     void Start()
     {
         var model = GameObject.Find("Model");
         Debug.Assert(model != null, "No se ha encontrado el modelo.");
 
-        var gameManager = (GameManager)model.GetComponent(typeof(GameManager));
-
-        sateliteSelector = (SateliteSelector)model.GetComponent(typeof(SateliteSelector));
+        gameManager = (GameManager)model.GetComponent(typeof(GameManager));
 
         campo = gameObject.GetComponentInChildren<Text>();
         foreach (Text text in gameObject.GetComponentsInChildren<Text>())
         {
-            if (text.name.ToLower().EndsWith("value"))
+            if (text.name.ToLower().StartsWith("valor"))
             {
                 campo = text;
             }
         }
 
         //nombre = gameObject.GetComponent<Text>();
-        Debug.Assert(campo != null, "No se ha encontrado el campo value");
+        Debug.Assert(campo != null, "No se ha encontrado el campo valor");
     }
 }

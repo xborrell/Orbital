@@ -2,23 +2,32 @@
 using System.Collections;
 using System;
 
-public class Satelite : MonoBehaviour
+public class Satelite
 {
     public string Nombre;
+    public Vector3 PosicionInicial;
     public Vector3 VelocidadInicial;
 
-    GameManager gameManager;
     SateliteData data;
     CalculadorMovimiento calculadorMovimiento;
     CalculadorRotacion calculadorRotacion;
     MenteSatelite mente;
-    Transform childModel;
+    MotorSatelite motor;
 
-    public int Altura { get { return data.Altura; } }
-    public int Apoapsis { get { return data.Apoapsis; } }
-    public int Periapsis { get { return data.Periapsis; } }
+    public float Altura { get { return data.Altura; } }
+    public float Apoapsis { get { return data.Apoapsis; } }
+    public float Periapsis { get { return data.Periapsis; } }
     public float Inclinacion { get { return data.Inclinacion; } }
-    public string Accion { get { return mente.Descripcion; } }
+    public SateliteData Data { get { return data; } }
+    public MenteSatelite Mente { get { return mente; } }
+
+    public string Accion
+    {
+        get
+        {
+            return Mente.DecisionEnCurso == null ? "Pensando" : Mente.DecisionEnCurso.LogItem.Titulo;
+        }
+    }
 
     public string Actitud
     {
@@ -35,41 +44,21 @@ public class Satelite : MonoBehaviour
         }
     }
 
-    void Awake()
+    public Satelite(Vector3 posicionInicial, Vector3 velocidadInicial, GameManager manager)
     {
-        data = new SateliteData();
+        data = new SateliteData(posicionInicial, velocidadInicial);
         calculadorMovimiento = new CalculadorMovimiento(data);
         calculadorRotacion = new CalculadorRotacion(data);
-        mente = new MenteSatelite(data);
+        mente = new MenteSatelite(data, manager);
+        motor = new MotorSatelite(data);
     }
 
-    // Use this for initialization
-    void Start()
-    {
-        var model = GameObject.Find("Model");
-        Debug.Assert(model != null, "No se ha encontrado GameManager en Satelite.");
-
-        gameManager = (GameManager)model.GetComponent(typeof(GameManager));
-
-        foreach (Transform child in transform)
-        {
-            if (child.name.StartsWith("model"))
-            {
-                childModel = child;
-            }
-        }
-
-        data.PosicionEnModelo = Conversor.RenderToModel(transform.position);
-        data.Velocidad = VelocidadInicial;
-        data.Rotacion = childModel.transform.rotation;
-    }
-
-    // Update is called once per frame
-    void FixedUpdate()
+    public void FixedUpdate()
     {
         mente.Update(Time.deltaTime);
+        motor.CalcularImpulso(Time.deltaTime);
 
-        transform.position = calculadorMovimiento.CalcularNuevaPosicion(Time.deltaTime);
-        childModel.transform.rotation = calculadorRotacion.CalcularNuevaRotacion(Time.deltaTime);
+        calculadorMovimiento.CalcularNuevaPosicion(Time.deltaTime);
+        calculadorRotacion.CalcularNuevaRotacion(Time.deltaTime);
     }
 }

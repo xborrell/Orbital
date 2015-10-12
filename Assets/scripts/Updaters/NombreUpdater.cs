@@ -7,6 +7,6 @@ public class NombreUpdater : AbstractUpdater
 {
     void Update()
     {
-        campo.text = sateliteSelector.satelite.Nombre;
+        campo.text = gameManager.SateliteSeleccionado.Nombre;
     }
 }

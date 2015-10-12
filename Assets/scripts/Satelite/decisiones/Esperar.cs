@@ -2,24 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using UnityEngine;
 
-public class Esperar : IDecision
+public class Esperar : Decision
 {
-    public bool DecisionFinalizada{ get; protected set;}
-    SateliteData _data;
-    const float tiempoDeEspera = 5.0F;
-    float tiempoTranscurrido = 0.0F;
-
-    public Esperar(SateliteData data)
+    public Esperar(SateliteData data, float segundosAEsperar)
+        : base(data)
     {
-        _data = data;
+        SolicitarEspera(segundosAEsperar);
+
+        LogItem = new LogItem( 1, "Esperant", string.Format("Esperant {0} segons", segundosAEsperar));
     }
 
-    public void Actua(float deltaTime)
+    public override bool DebeActuar()
     {
-        tiempoTranscurrido += deltaTime;
-
-        DecisionFinalizada = tiempoTranscurrido >= tiempoDeEspera;
+        return true; ;
     }
 }

@@ -13,7 +13,7 @@ public class CalculadorRotacion
         _data = data;
     }
 
-    public Quaternion CalcularNuevaRotacion(float deltaTime)
+    public void CalcularNuevaRotacion(float deltaTime)
     {
         if (_data.ActitudSolicitada != ActitudRotacion.Ninguna)
         {
@@ -29,13 +29,11 @@ public class CalculadorRotacion
         switch (_data.Actitud)
         {
             case ActitudRotacion.CaidaLibre: break;
-            case ActitudRotacion.Maniobrando: _data.Rotacion = maniobra.CalcularNuevaRotacion(deltaTime); break;
-            case ActitudRotacion.EnfocadoATierra: _data.Rotacion = CalcularRotacionATierra(); break;
-            case ActitudRotacion.Orbital: _data.Rotacion = CalcularRotacionOrbital(); break;
+            case ActitudRotacion.Maniobrando: _data.Orientacion = maniobra.CalcularNuevaOrientacion(deltaTime); break;
+            case ActitudRotacion.EnfocadoATierra: _data.Orientacion = CalcularOrientacionATierra(); break;
+            case ActitudRotacion.Orbital: _data.Orientacion = CalcularOrientacionOrbital(); break;
             default: throw new ArgumentException("Actitud no implementada en CalculadorRotacion2");
         }
-
-        return _data.Rotacion;
     }
 
     private void GestionarCambioDeRotacion()
@@ -45,8 +43,8 @@ public class CalculadorRotacion
             switch (_data.ActitudSolicitada)
             {
                 case ActitudRotacion.CaidaLibre: RotacionLibre(); break;
-                case ActitudRotacion.EnfocadoATierra: RotacionATierra(); break;
-                case ActitudRotacion.Orbital: RotacionOrbital(); break;
+                case ActitudRotacion.EnfocadoATierra: OrientacionATierra(); break;
+                case ActitudRotacion.Orbital: OrientacionOrbital(); break;
             }
         }
         _data.ActitudSolicitada = ActitudRotacion.Ninguna;
@@ -57,43 +55,37 @@ public class CalculadorRotacion
         _data.Actitud = ActitudRotacion.CaidaLibre;
     }
 
-    private void RotacionOrbital()
+    private void OrientacionOrbital()
     {
         _data.Actitud = ActitudRotacion.Maniobrando;
-        Quaternion rotacion = CalcularRotacionOrbital();
+        Vector3 orientacion = CalcularOrientacionOrbital();
 
-        maniobra = new ManiobraRotacion(ActitudRotacion.Orbital, _data, rotacion);
+        maniobra = new ManiobraRotacion(ActitudRotacion.Orbital, _data, orientacion);
     }
 
-    private void RotacionATierra()
+    private void OrientacionATierra()
     {
         _data.Actitud = ActitudRotacion.Maniobrando;
-        Quaternion rotacion = CalcularRotacionATierra();
+        Vector3 orientacion = CalcularOrientacionATierra();
 
-        maniobra = new ManiobraRotacion(ActitudRotacion.EnfocadoATierra, _data, rotacion);
+        maniobra = new ManiobraRotacion(ActitudRotacion.EnfocadoATierra, _data, orientacion);
     }
 
-    Quaternion CalcularRotacionATierra()
+    Vector3 CalcularOrientacionATierra()
     {
-        Vector3 forward = _data.PosicionEnModelo;
+        Vector3 forward = _data.Posicion;
         forward.Normalize();
         forward *= -1;
 
-        Vector3 upward = _data.Velocidad;
-        upward.Normalize();
-
-        return Quaternion.LookRotation(forward, upward);
+        return forward;
     }
 
-    Quaternion CalcularRotacionOrbital()
+    Vector3 CalcularOrientacionOrbital()
     {
 
         Vector3 forward = _data.Velocidad;
         forward.Normalize();
 
-        Vector3 upward = _data.PosicionEnModelo;
-        upward.Normalize();
-
-        return Quaternion.LookRotation(forward, upward);
+        return forward;
     }
 }

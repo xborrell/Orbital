@@ -8,7 +8,7 @@ public class InclinacionUpdater : AbstractUpdater
 {
     void Update()
     {
-        var inclinacion = sateliteSelector.satelite.Inclinacion;
-        campo.text = inclinacion == 0 ? "Desconocido" : inclinacion.ToString("#,2 m.");
+        var data = gameManager.SateliteSeleccionado.Inclinacion;
+        campo.text = data < 0 ? "Desconocida" : string.Format("{0}º", data.ToString("N3"));
     }
 }

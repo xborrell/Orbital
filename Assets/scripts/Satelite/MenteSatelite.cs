@@ -6,99 +6,60 @@ using UnityEngine;
 
 public class MenteSatelite
 {
-    enum state
-    {
-        inicio,
-        calculoValores,
-        espera,
-    }
+    List<Decision> decisiones;
+    public Decision DecisionEnCurso { get; protected set; }
+    SateliteData data;
+    GameManager manager;
 
-    protected SateliteData _data;
-    IDecision decision;
-    state estado = state.inicio;
-
-    public string Descripcion
+    public MenteSatelite(SateliteData data, GameManager manager)
     {
-        get
-        {
-            switch (estado)
-            {
-                case state.inicio: return "Inicializando";
-                case state.calculoValores: return "Calculando orbita";
-                case state.espera: return "En espera";
-                default: throw new ArgumentException("Estado no implementado");
-            }
-        }
-    }
+        this.manager = manager;
+        this.data = data;
 
-    public MenteSatelite(SateliteData data)
-    {
-        _data = data;
+        decisiones = new List<Decision>() {
+                new CalcularSentidoDeLaOrbita(data),
+                new CalcularApoapsis(data),
+                new CalcularPeriapsis(data),
+                new CalcularInclinacion(data),
+                new Circularizar(data),
+                new Esperar(data, 60F),
+            };
+        ObtieneLaSiguienteDecision();
     }
 
     internal void Update(float deltaTime)
     {
-        if (decision == null)
-            GeneraSiguienteDecision();
+        if (DecisionEnCurso == null)
+            ObtieneLaSiguienteDecision();
 
-        else if (decision.DecisionFinalizada)
+        else if (DecisionEnCurso.DecisionFinalizada)
             FinalizaDecision();
 
         else
-            decision.Actua(deltaTime);
+            DecisionEnCurso.Actua(deltaTime);
     }
 
-    void GeneraSiguienteDecision()
+    void ObtieneLaSiguienteDecision()
     {
-        switch (estado)
+        foreach (Decision decision in decisiones)
         {
-            case state.inicio: BeginInicio(); break;
-            case state.calculoValores: BeginCalculo(); break;
-            case state.espera: BeginEspera(); break;
-            default: throw new ArgumentException("Estado no implementado");
+            if (decision.DebeActuar())
+            {
+                decision.Inicializar();
+                DecisionEnCurso = decision;
+                manager.Pausa();
+                return;
+            }
         }
     }
 
     private void FinalizaDecision()
     {
-        switch (estado)
-        {
-            case state.inicio: EndInicio(); break;
-            case state.calculoValores: EndCalculo(); break;
-            case state.espera: EndEspera(); break;
-            default: throw new ArgumentException("Estado no implementado");
-        }
+        data.Logger.Informar( DecisionEnCurso);
+        DecisionEnCurso = null;
 
-        decision = null;
-    }
-
-    private void BeginInicio()
-    {
-        decision = new IniciarSatelite(_data);
-    }
-
-    private void EndInicio()
-    {
-        estado = state.calculoValores;
-    }
-
-    private void BeginEspera()
-    {
-        decision = new Esperar(_data);
-    }
-
-    private void EndEspera()
-    {
-        estado = state.espera;
-    }
-
-    private void BeginCalculo()
-    {
-        decision = new CalcularValoresOrbitales(_data);
-    }
-
-    private void EndCalculo()
-    {
-        estado = state.espera;
+        if (data.Actitud != ActitudRotacion.CaidaLibre)
+            data.ActitudSolicitada = ActitudRotacion.CaidaLibre;
     }
 }
+

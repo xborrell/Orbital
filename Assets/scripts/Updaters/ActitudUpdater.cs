@@ -8,6 +8,6 @@ public class ActitudUpdater : AbstractUpdater
 {
     void Update()
     {
-        campo.text = sateliteSelector.satelite.Actitud;
+        campo.text = gameManager.SateliteSeleccionado.Actitud;
     }
 }

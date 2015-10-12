@@ -46,32 +46,59 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\scripts\CameraManager.cs" />
+     <Compile Include="Assets\scripts\CamaraATierra.cs" />
+     <Compile Include="Assets\scripts\CameraMaster.cs" />
      <Compile Include="Assets\scripts\Config.cs" />
-     <Compile Include="Assets\scripts\Conversor.cs" />
      <Compile Include="Assets\scripts\GameManager.cs" />
-     <Compile Include="Assets\scripts\LightManager.cs" />
+     <Compile Include="Assets\scripts\Log\ILogable.cs" />
+     <Compile Include="Assets\scripts\Log\LogItem.cs" />
+     <Compile Include="Assets\scripts\Log\LogStorage.cs" />
+     <Compile Include="Assets\scripts\RotacionTerrestre.cs" />
      <Compile Include="Assets\scripts\Satelite\ActitudRotacion.cs" />
      <Compile Include="Assets\scripts\Satelite\CalculadorMovimiento.cs" />
      <Compile Include="Assets\scripts\Satelite\CalculadorRotacion.cs" />
+     <Compile Include="Assets\scripts\Satelite\Conversor.cs" />
+     <Compile Include="Assets\scripts\Satelite\ConversorOrbital.cs" />
      <Compile Include="Assets\scripts\Satelite\ManiobraRotacion.cs" />
      <Compile Include="Assets\scripts\Satelite\MenteSatelite.cs" />
+     <Compile Include="Assets\scripts\Satelite\MotorSatelite.cs" />
+     <Compile Include="Assets\scripts\Satelite\OrbitalElements.cs" />
      <Compile Include="Assets\scripts\Satelite\Satelite.cs" />
      <Compile Include="Assets\scripts\Satelite\SateliteData.cs" />
-     <Compile Include="Assets\scripts\Satelite\decisiones\CalcularValoresOrbitales.cs" />
+     <Compile Include="Assets\scripts\Satelite\SateliteRender.cs" />
+     <Compile Include="Assets\scripts\Satelite\decisiones\CalcularApoapsis.cs" />
+     <Compile Include="Assets\scripts\Satelite\decisiones\CalcularInclinacion.cs" />
+     <Compile Include="Assets\scripts\Satelite\decisiones\CalcularPeriapsis.cs" />
+     <Compile Include="Assets\scripts\Satelite\decisiones\CalcularSentidoDeLaOrbita.cs" />
+     <Compile Include="Assets\scripts\Satelite\decisiones\Circularizar.cs" />
+     <Compile Include="Assets\scripts\Satelite\decisiones\Decision.cs" />
      <Compile Include="Assets\scripts\Satelite\decisiones\Esperar.cs" />
-     <Compile Include="Assets\scripts\Satelite\decisiones\IDecision.cs" />
-     <Compile Include="Assets\scripts\Satelite\decisiones\IniciarSatelite.cs" />
+     <Compile Include="Assets\scripts\Satelite\decisiones\PosicionarSateliteEnActitudOrbital.cs" />
+     <Compile Include="Assets\scripts\Satelite\decisiones\pasos\Paso.cs" />
+     <Compile Include="Assets\scripts\Satelite\decisiones\pasos\PasoComprobarEnfoque.cs" />
+     <Compile Include="Assets\scripts\Satelite\decisiones\pasos\PasoEnfoqueATierra.cs" />
+     <Compile Include="Assets\scripts\Satelite\decisiones\pasos\PasoEnfoqueOrbital.cs" />
+     <Compile Include="Assets\scripts\Satelite\decisiones\pasos\PasoEsperar.cs" />
+     <Compile Include="Assets\scripts\Satelite\decisiones\pasos\PasoEsperarApoapsis.cs" />
+     <Compile Include="Assets\scripts\Satelite\decisiones\pasos\PasoEsperarPeriapsis.cs" />
+     <Compile Include="Assets\scripts\Satelite\decisiones\pasos\PasoGenerico.cs" />
+     <Compile Include="Assets\scripts\Satelite\decisiones\pasos\PasoTomarAltura.cs" />
      <Compile Include="Assets\scripts\SateliteSelector.cs" />
      <Compile Include="Assets\scripts\Updaters\AbstractUpdater.cs" />
      <Compile Include="Assets\scripts\Updaters\AccionUpdater.cs" />
      <Compile Include="Assets\scripts\Updaters\ActitudUpdater.cs" />
+     <Compile Include="Assets\scripts\Updaters\AlturaRealUpdater.cs" />
      <Compile Include="Assets\scripts\Updaters\AlturaUpdater.cs" />
      <Compile Include="Assets\scripts\Updaters\ApoapsisUpdater.cs" />
+     <Compile Include="Assets\scripts\Updaters\CamaraMaestraUpdater.cs" />
+     <Compile Include="Assets\scripts\Updaters\EscalaTemporalUpdater.cs" />
      <Compile Include="Assets\scripts\Updaters\InclinacionUpdater.cs" />
+     <Compile Include="Assets\scripts\Updaters\LogUpdater.cs" />
      <Compile Include="Assets\scripts\Updaters\NombreUpdater.cs" />
      <Compile Include="Assets\scripts\Updaters\PeriapsisUpdater.cs" />
-     <Compile Include="Assets\scripts\Updaters\TiempoUpdater.cs" />
+     <Compile Include="Assets\scripts\Updaters\PosicioRealUpdater.cs" />
+     <Compile Include="Assets\scripts\Updaters\TiempoTotalUpdater.cs" />
+     <Compile Include="Assets\scripts\Updaters\VelocitatRealUpdater.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

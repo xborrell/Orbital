@@ -3,7 +3,7 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 
-public class SateliteSelector : MonoBehaviour
+public class SateliteSelector
 {
     public Satelite satelite
     {
@@ -13,23 +13,26 @@ public class SateliteSelector : MonoBehaviour
         }
     }
     List<Satelite> satelites = new List<Satelite>();
-    int index = 0;
+    int index;
 
     GameObject camara;
 
     // Use this for initialization
-    void Start()
+    public void Start(GameManager manager)
     {
-        GameObject contenedorSatelites = GameObject.Find("Satelites");
-        Debug.Assert(contenedorSatelites != null, "No se ha encontrado el selector de satelites");
+        satelites.Add(new Satelite( 
+            new Vector3(-5002.099F, 24.236F, -4585.61F),
+            new Vector3(2.723F, -6.502F, -3.001F),
+            manager
+        ));
+        
+        camara = GameObject.Find("Satellite Camera");
+        index = 0;
+    }
 
-        foreach (Transform child in contenedorSatelites.transform)
-        {
-            satelites.Add(child.GetComponent<Satelite>());
-        }
-
-        camara = GameObject.Find("Main Camera");
-        Debug.Assert(contenedorSatelites != null, "No se ha encontrado la camara en SateliteSelector");
+    public void FixedUpdate()
+    {
+        satelites.ForEach(sat => sat.FixedUpdate());
     }
 
     public void Previus()
@@ -39,7 +42,7 @@ public class SateliteSelector : MonoBehaviour
         if (index < 0)
             index = satelites.Count - 1;
 
-        camara.transform.SetParent(satelite.transform, false);
+        //camara.transform.SetParent(satelite.transform, false);
     }
 
     public void Next()
@@ -49,6 +52,6 @@ public class SateliteSelector : MonoBehaviour
         if (index >= satelites.Count)
             index = 0;
 
-        camara.transform.SetParent(satelite.transform, false);
+        //camara.transform.SetParent(satelite.transform, false);
     }
 }
