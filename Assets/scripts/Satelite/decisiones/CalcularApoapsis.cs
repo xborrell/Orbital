@@ -3,15 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class CalcularApoapsis : DecisionCompleja
+public class CalcularApoapsis : Decision
 {
-    public override string Descripcion
-    {
-        get { return "Calc. Apoapsis"; }
-    }
-
-    float alturaAnterior;
-
     public override bool DebeActuar()
     {
         return ((Data.Apoapsis < 0) && (Data.OrbitaSubiendo == true));
@@ -24,6 +17,15 @@ public class CalcularApoapsis : DecisionCompleja
         DefinirPaso(new PasoComprobarEnfoque(data, ActitudRotacion.EnfocadoATierra));
         DefinirPaso(new PasoTomarAltura(data));
         DefinirPaso(new PasoEsperarApoapsis(data));
-        DefinirPaso(new PasoGenerico(data, "Registrando Apoapsis", x => { Data.Apoapsis = Data.AlturaDeReferencia; return true; }));
+        DefinirPaso(new PasoGenerico(data, new LogItem( 1, "Registrant Apoapsis" ),
+            x =>
+            {
+                Data.Apoapsis = Data.AlturaDeReferencia;
+                Data.OrbitaSubiendo = null;
+                return true;
+            }
+        ));
+
+        LogItem = new LogItem(0, "Calc. Apoapsis", "Calculant Apoapsis");
     }
 }

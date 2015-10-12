@@ -4,15 +4,8 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class CalcularInclinacion : DecisionCompleja
+public class CalcularInclinacion : Decision
 {
-    public override string Descripcion
-    {
-        get { return "Calc. Inclinacion"; }
-    }
-
-    Vector3 posicionAnterior;
-
     public override bool DebeActuar()
     {
         return Data.Inclinacion < 0;
@@ -23,7 +16,9 @@ public class CalcularInclinacion : DecisionCompleja
     {
         DefinirPaso(new PasoEnfoqueATierra(data));
         DefinirPaso(new PasoComprobarEnfoque(data, ActitudRotacion.EnfocadoATierra));
-        DefinirPaso(new PasoGenerico(data, "Calcular la inclinación", Calcular));
+        DefinirPaso(new PasoGenerico(data, new LogItem(1, "Calc. inclinació", "Calcular l'inclinació"), Calcular));
+
+        LogItem = new LogItem(0, "Calc. Inclinació", "Calculant Inclinació");
     }
 
     bool Calcular(float deltaTime)

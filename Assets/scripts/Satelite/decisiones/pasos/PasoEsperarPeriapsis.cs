@@ -5,7 +5,9 @@ using System.Text;
 
 public class PasoEsperarPeriapsis : Paso
 {
-    public PasoEsperarPeriapsis(SateliteData data) : base(data, "Esperando Periapsis") { }
+    public PasoEsperarPeriapsis(SateliteData data) : base(data) {
+        LogItem = new LogItem( 1, "Esperant Periapsis");
+    }
 
     override public void Ejecutar(float time)
     {

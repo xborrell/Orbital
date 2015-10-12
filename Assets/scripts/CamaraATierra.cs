@@ -4,7 +4,7 @@ using System.Collections;
 public class CamaraATierra : MonoBehaviour
 {
     GameObject target;
-    Camera camera;
+    Camera camaraGestionada;
     float distanciaAPintar = Config.EarthRadius + 50;
 
     void Start()
@@ -12,7 +12,7 @@ public class CamaraATierra : MonoBehaviour
         target = GameObject.Find("Satellite Camera");
         Debug.Assert(target != null, "No se ha encontrado la cámara de satellite.");
 
-        camera = GetComponent<Camera>();
+        camaraGestionada = GetComponent<Camera>();
     }
 
     void LateUpdate()
@@ -20,6 +20,6 @@ public class CamaraATierra : MonoBehaviour
         transform.position = target.transform.position;
         transform.rotation = target.transform.rotation;
 
-        camera.farClipPlane = transform.position.magnitude + distanciaAPintar;
+        camaraGestionada.farClipPlane = transform.position.magnitude + distanciaAPintar;
     }
 }

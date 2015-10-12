@@ -8,9 +8,10 @@ public class PasoComprobarEnfoque : Paso
     public ActitudRotacion ActitudDeseada { get; protected set; }
 
     public PasoComprobarEnfoque(SateliteData data, ActitudRotacion actitudDeseada)
-        : base(data, "Solicitar el enfoque a tierra")
+        : base(data)
     {
         ActitudDeseada = actitudDeseada;
+        LogItem = new LogItem( 1, "Esperar Orientació", "Esperar l'orientació demanada.");
     }
 
     override public void Ejecutar(float time)

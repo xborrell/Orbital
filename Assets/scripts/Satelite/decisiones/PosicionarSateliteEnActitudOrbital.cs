@@ -3,19 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public class PosicionarSateliteEnActitudOrbital : DecisionCompleja
+public class PosicionarSateliteEnActitudOrbital : Decision
 {
-    public override string Descripcion
-    {
-        get { return "Posicionar Satelite en Actitud Orbital"; }
-    }
-    public override string AccionEnCurso
-    {
-        get { return "Maniobrando"; }
-    }
     public PosicionarSateliteEnActitudOrbital(SateliteData data) : base(data) { 
         DefinirPaso(new PasoEnfoqueOrbital(data));
         DefinirPaso(new PasoComprobarEnfoque(data, ActitudRotacion.Orbital));
+
+        LogItem = new LogItem( 0, "Orientació orbital", "Orientar el satel·lit amb l'orbita");
     }
 
     public override bool DebeActuar()

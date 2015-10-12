@@ -50,6 +50,9 @@
      <Compile Include="Assets\scripts\CameraMaster.cs" />
      <Compile Include="Assets\scripts\Config.cs" />
      <Compile Include="Assets\scripts\GameManager.cs" />
+     <Compile Include="Assets\scripts\Log\ILogable.cs" />
+     <Compile Include="Assets\scripts\Log\LogItem.cs" />
+     <Compile Include="Assets\scripts\Log\LogStorage.cs" />
      <Compile Include="Assets\scripts\RotacionTerrestre.cs" />
      <Compile Include="Assets\scripts\Satelite\ActitudRotacion.cs" />
      <Compile Include="Assets\scripts\Satelite\CalculadorMovimiento.cs" />
@@ -69,7 +72,6 @@
      <Compile Include="Assets\scripts\Satelite\decisiones\CalcularSentidoDeLaOrbita.cs" />
      <Compile Include="Assets\scripts\Satelite\decisiones\Circularizar.cs" />
      <Compile Include="Assets\scripts\Satelite\decisiones\Decision.cs" />
-     <Compile Include="Assets\scripts\Satelite\decisiones\DecisionCompleja.cs" />
      <Compile Include="Assets\scripts\Satelite\decisiones\Esperar.cs" />
      <Compile Include="Assets\scripts\Satelite\decisiones\PosicionarSateliteEnActitudOrbital.cs" />
      <Compile Include="Assets\scripts\Satelite\decisiones\pasos\Paso.cs" />

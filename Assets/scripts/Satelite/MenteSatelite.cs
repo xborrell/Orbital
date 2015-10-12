@@ -7,19 +7,13 @@ using UnityEngine;
 public class MenteSatelite
 {
     List<Decision> decisiones;
-    public Decision decisionEnCurso { get; protected set; }
+    public Decision DecisionEnCurso { get; protected set; }
     SateliteData data;
+    GameManager manager;
 
-    public string Descripcion
+    public MenteSatelite(SateliteData data, GameManager manager)
     {
-        get
-        {
-            return decisionEnCurso == null ? "Pensando" : decisionEnCurso.Descripcion;
-        }
-    }
-
-    public MenteSatelite(SateliteData data)
-    {
+        this.manager = manager;
         this.data = data;
 
         decisiones = new List<Decision>() {
@@ -28,7 +22,6 @@ public class MenteSatelite
                 new CalcularPeriapsis(data),
                 new CalcularInclinacion(data),
                 new Circularizar(data),
-                new PosicionarSateliteEnActitudOrbital(data),
                 new Esperar(data, 60F),
             };
         ObtieneLaSiguienteDecision();
@@ -36,14 +29,14 @@ public class MenteSatelite
 
     internal void Update(float deltaTime)
     {
-        if (decisionEnCurso == null)
+        if (DecisionEnCurso == null)
             ObtieneLaSiguienteDecision();
 
-        else if (decisionEnCurso.DecisionFinalizada)
+        else if (DecisionEnCurso.DecisionFinalizada)
             FinalizaDecision();
 
         else
-            decisionEnCurso.Actua(deltaTime);
+            DecisionEnCurso.Actua(deltaTime);
     }
 
     void ObtieneLaSiguienteDecision()
@@ -53,7 +46,8 @@ public class MenteSatelite
             if (decision.DebeActuar())
             {
                 decision.Inicializar();
-                decisionEnCurso = decision;
+                DecisionEnCurso = decision;
+                manager.Pausa();
                 return;
             }
         }
@@ -61,7 +55,8 @@ public class MenteSatelite
 
     private void FinalizaDecision()
     {
-        decisionEnCurso = null;
+        data.Logger.Informar( DecisionEnCurso);
+        DecisionEnCurso = null;
 
         if (data.Actitud != ActitudRotacion.CaidaLibre)
             data.ActitudSolicitada = ActitudRotacion.CaidaLibre;

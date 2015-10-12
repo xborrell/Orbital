@@ -9,9 +9,6 @@ public class LogUpdater : MonoBehaviour
 {
     protected Text campo;
     protected GameManager gameManager;
-    List<string> mensajes;
-    List<string> pasos;
-    Decision ultimaDecision;
 
     void Start()
     {
@@ -21,46 +18,37 @@ public class LogUpdater : MonoBehaviour
         gameManager = (GameManager)model.GetComponent(typeof(GameManager));
 
         campo = gameObject.GetComponent<Text>();
-
-        mensajes = new List<string>();
-        pasos = new List<string>();
-
-        ultimaDecision = gameManager.SateliteSeleccionado.Mente.decisionEnCurso;
     }
 
     void Update()
     {
+        Satelite satelite = gameManager.SateliteSeleccionado;
+
+        Decision ultimaDecision = satelite.Mente.DecisionEnCurso;
+
         StringBuilder sb = new StringBuilder();
 
         if (ultimaDecision != null)
         {
-            sb.AppendLine(ultimaDecision.Descripcion);
-
-            if (!string.IsNullOrEmpty(ultimaDecision.AccionEnCurso))
-            {
-                if ((pasos.Count > 0) && (ultimaDecision.AccionEnCurso != pasos[0]))
-                {
-                    pasos.Add(string.Format("    {0}", ultimaDecision.AccionEnCurso));
-                }
-            }
-
-            if (ultimaDecision != gameManager.SateliteSeleccionado.Mente.decisionEnCurso)
-            {
-                mensajes.Insert(0, ultimaDecision.Descripcion);
-                ultimaDecision = gameManager.SateliteSeleccionado.Mente.decisionEnCurso;
-                pasos.Clear();
-            }
-
-            foreach (string s in pasos)
-                sb.AppendLine(s);
+            sb.AppendLine(ultimaDecision.LogItem.Descripcion);
         }
-        else
+
+        foreach (LogItem logItem in satelite.Data.Logger.Mensajes)
         {
-            ultimaDecision = gameManager.SateliteSeleccionado.Mente.decisionEnCurso;
-        }
+            switch (logItem.Level)
+            {
+                case 0:
+                    sb.Append(logItem.Descripcion);
+                    break;
+                case 1:
+                    sb.AppendFormat("    -{0}", logItem.Descripcion);
+                    break;
+                default:
+                    throw new ArgumentException(string.Format("Nivell de log no previst: {0}", logItem.Level));
+            }
 
-        foreach (string s in mensajes)
-            sb.AppendLine(s);
+            sb.AppendLine();
+        }
 
         campo.text = sb.ToString();
     }

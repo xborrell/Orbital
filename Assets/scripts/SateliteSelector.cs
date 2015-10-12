@@ -18,11 +18,12 @@ public class SateliteSelector
     GameObject camara;
 
     // Use this for initialization
-    public void Start()
+    public void Start(GameManager manager)
     {
         satelites.Add(new Satelite( 
             new Vector3(-5002.099F, 24.236F, -4585.61F),
-            new Vector3(2.723F, -6.502F, -3.001F)
+            new Vector3(2.723F, -6.502F, -3.001F),
+            manager
         ));
         
         camara = GameObject.Find("Satellite Camera");

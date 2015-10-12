@@ -5,39 +5,12 @@ using System.Text;
 
 public class Esperar : Decision
 {
-    public override string Descripcion
-    {
-        get { return string.Format( "Esperando {0} segundos", tiempoDeEspera ); }
-    }
-
-    public override string AccionEnCurso
-    {
-        get { return string.Format("Faltan {0} segundos", tiempoTranscurrido); }
-    }
-
-    float tiempoDeEspera = 5.0F;
-    float tiempoTranscurrido = 0.0F;
-
-    public Esperar(SateliteData data, float tiempoAEsperar)
+    public Esperar(SateliteData data, float segundosAEsperar)
         : base(data)
     {
-        tiempoDeEspera = tiempoAEsperar;
-    }
+        SolicitarEspera(segundosAEsperar);
 
-    public Esperar(SateliteData data) : base(data) { }
-
-    override public void Inicializar()
-    {
-        base.Inicializar();
-        tiempoTranscurrido = 0;
-    }
-
-
-    override public void Actua(float deltaTime)
-    {
-        tiempoTranscurrido += deltaTime;
-
-        DecisionFinalizada = tiempoTranscurrido >= tiempoDeEspera;
+        LogItem = new LogItem( 1, "Esperant", string.Format("Esperant {0} segons", segundosAEsperar));
     }
 
     public override bool DebeActuar()

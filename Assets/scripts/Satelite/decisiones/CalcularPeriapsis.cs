@@ -2,16 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
-public class CalcularPeriapsis : DecisionCompleja
+public class CalcularPeriapsis : Decision
 {
-    public override string Descripcion
-    {
-        get { return "Calc. Periapsis"; }
-    }
-
-    float alturaAnterior;
-
     public override bool DebeActuar()
     {
         return ((Data.Periapsis < 0) && (Data.OrbitaSubiendo == false));
@@ -24,6 +18,14 @@ public class CalcularPeriapsis : DecisionCompleja
         DefinirPaso(new PasoComprobarEnfoque(data, ActitudRotacion.EnfocadoATierra));
         DefinirPaso(new PasoTomarAltura(data));
         DefinirPaso(new PasoEsperarPeriapsis(data));
-        DefinirPaso(new PasoGenerico(data, "Registrando Periapsis", x => { Data.Periapsis = Data.AlturaDeReferencia; return true; }));
+        DefinirPaso(new PasoGenerico(data, new LogItem(1,"Registrant Periapsis"), 
+            x => { 
+                Data.Periapsis = Data.AlturaDeReferencia; 
+                Data.OrbitaSubiendo = null; 
+                return true; 
+            }
+        ));
+
+        LogItem = new LogItem(0, "Calc. Periapsis", "Calculant Periapsis");
     }
 }

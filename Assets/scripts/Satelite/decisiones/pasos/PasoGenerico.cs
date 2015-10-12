@@ -7,9 +7,11 @@ public class PasoGenerico : Paso
 {
     public Func<float, bool> Accion { get; protected set; }
 
-    public PasoGenerico(SateliteData data, string titulo, Func<float, bool> paso) : base(data, titulo )
+    public PasoGenerico(SateliteData data, LogItem logItem, Func<float, bool> paso)
+        : base(data)
     {
         Accion = paso;
+        LogItem = logItem;
     }
 
     override public void Ejecutar(float time)

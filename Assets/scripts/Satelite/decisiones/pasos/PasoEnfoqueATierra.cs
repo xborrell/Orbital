@@ -5,7 +5,10 @@ using System.Text;
 
 public class PasoEnfoqueATierra : Paso
 {
-    public PasoEnfoqueATierra(SateliteData data) : base(data, "Solicitar el enfoque a tierra")    {    }
+    public PasoEnfoqueATierra(SateliteData data) : base(data)
+    {
+        LogItem = new LogItem( 1, "Orientació terra", "Demanar l'orientació a terra.");
+    }
 
     override public void Ejecutar(float time)
     {

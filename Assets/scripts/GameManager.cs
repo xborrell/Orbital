@@ -10,8 +10,10 @@ public class GameManager : MonoBehaviour
     private List<float> tiempos = new List<float> { 0, 1, 2, 5, 10, 25, 50, 100 };
     private int tiempoSeleccionado = 1;
     private SateliteSelector selector;
+    private LogStorage log;
 
     public Satelite SateliteSeleccionado { get { return selector.satelite; } }
+    public LogStorage Logger { get { return log; } }
 
     void Awake()
     {
@@ -22,16 +24,25 @@ public class GameManager : MonoBehaviour
         Time.timeScale = tiempos[tiempoSeleccionado];
 
         selector = new SateliteSelector();
+        log = new LogStorage();
     }
 
     void Start()
     {
-        selector.Start();
+        selector.Start(this);
     }
 
     void FixedUpdate()
     {
         selector.FixedUpdate();
+    }
+
+    public void Pausa()
+    {
+        while (tiempoSeleccionado > 0)
+        {
+            Frenar();
+        }
     }
 
     public void Frenar()

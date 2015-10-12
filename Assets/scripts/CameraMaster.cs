@@ -34,7 +34,7 @@ public class CameraMaster : MonoBehaviour
         if (isActivated)
         {
             var xAngulo = Input.GetAxis("Mouse X") * xSpeed;
-            var yAngulo = Input.GetAxis("Mouse Y") * xSpeed;
+            var yAngulo = Input.GetAxis("Mouse Y") * ySpeed;
 
             Vector3 xAxis = -data.Posicion;
             xAxis.Normalize();

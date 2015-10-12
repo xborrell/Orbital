@@ -4,20 +4,12 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class Circularizar : DecisionCompleja
+public class Circularizar : Decision
 {
-    ActitudRotacion actitudSolicitada;
     const float margenDeCircularización = 0.1F;
     float impulsoNecesario;
     float duracionDelImpulsoEnSegundos;
-    float marcaDeTiempo;
-    float duracionDeMediaOrbita;
     float nuevaVelocidad;
-
-    public override string Descripcion
-    {
-        get { return "Circularizar orbita."; }
-    }
 
     public override bool DebeActuar()
     {
@@ -29,13 +21,13 @@ public class Circularizar : DecisionCompleja
     public Circularizar(SateliteData data)
         : base(data)
     {
-        DefinirPaso(new PasoGenerico(data,"Calcular valor del Impulso", CalcularValoresDelImpulso));
+        DefinirPaso(new PasoGenerico(data,new LogItem( 1, "Calcular impuls", "Calcular el valor del impuls."), CalcularValoresDelImpulso));
         DefinirPaso(new PasoEnfoqueATierra(data));
         DefinirPaso(new PasoComprobarEnfoque(data, ActitudRotacion.EnfocadoATierra));
         DefinirPaso(new PasoTomarAltura(data));
         DefinirPaso(new PasoEsperarPeriapsis(data));
         DefinirPaso(new PasoEsperarApoapsis(data));
-        DefinirPaso(new PasoGenerico(data, "Cambiar velocidad", CambiarVelocidad));
+        DefinirPaso(new PasoGenerico(data, new LogItem( 1, "Cambiar velocitat"), CambiarVelocidad));
 
         //DefinirPaso(new Paso( "", EsperarPeriapsis));
         //DefinirPaso(new Paso( "", SolicitarEnfoqueOrbital));
@@ -44,7 +36,9 @@ public class Circularizar : DecisionCompleja
         //DefinirPaso(new Paso( "", EncenderMotor));
         //DefinirPaso(new Paso( "", EsperarDuracionDelImpulso));
         //DefinirPaso(new Paso( "", ApagarMotor));
-        DefinirPaso(new PasoGenerico(data, "Resetear valores orbitales", ResetearValoresOrbitales));
+        DefinirPaso(new PasoGenerico(data, new LogItem( 1, "Resetejar", "Resetejar valors orbitals" ), ResetearValoresOrbitales));
+
+        LogItem = new LogItem( 0, "Orbita circular", "Fer l'orbita circular");
     }
 
     private bool CambiarVelocidad(float delta)
@@ -82,35 +76,35 @@ public class Circularizar : DecisionCompleja
         return true;
     }
 
-    bool EsperarMomentoDeIgnicion(float deltaTime)
-    {
-        float tiempoYaGastado = Time.time - marcaDeTiempo;
-        float tiempoAntesDeApoapsisParaIgnicion = duracionDelImpulsoEnSegundos / 2;
-        float tiempoAEsperar = duracionDeMediaOrbita - tiempoYaGastado - tiempoAntesDeApoapsisParaIgnicion;
+    //bool EsperarMomentoDeIgnicion(float deltaTime)
+    //{
+    //    float tiempoYaGastado = Time.time - marcaDeTiempo;
+    //    float tiempoAntesDeApoapsisParaIgnicion = duracionDelImpulsoEnSegundos / 2;
+    //    float tiempoAEsperar = duracionDeMediaOrbita - tiempoYaGastado - tiempoAntesDeApoapsisParaIgnicion;
 
-        SolicitarEspera(tiempoAEsperar);
+    //    SolicitarEspera(tiempoAEsperar);
 
-        return true;
-    }
+    //    return true;
+    //}
 
-    bool EncenderMotor(float deltaTime)
-    {
-        Data.ImpulsoSolicitado = Config.ImpulsoMaximo;
-        return true;
-    }
+    //bool EncenderMotor(float deltaTime)
+    //{
+    //    Data.ImpulsoSolicitado = Config.ImpulsoMaximo;
+    //    return true;
+    //}
 
-    bool EsperarDuracionDelImpulso(float deltaTime)
-    {
-        SolicitarEspera(duracionDelImpulsoEnSegundos);
-        return true;
-    }
+    //bool EsperarDuracionDelImpulso(float deltaTime)
+    //{
+    //    SolicitarEspera(duracionDelImpulsoEnSegundos);
+    //    return true;
+    //}
 
-    bool ApagarMotor(float deltaTime)
-    {
-        Data.ImpulsoSolicitado = 0;
+    //bool ApagarMotor(float deltaTime)
+    //{
+    //    Data.ImpulsoSolicitado = 0;
 
-        return true;
-    }
+    //    return true;
+    //}
 
     bool ResetearValoresOrbitales(float deltaTime)
     {

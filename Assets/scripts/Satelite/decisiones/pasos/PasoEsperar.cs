@@ -9,13 +9,14 @@ public class PasoEsperar : Paso
     public float TiempoRestante { get; protected set; }
 
     public PasoEsperar(SateliteData data, float segundosAEsperar)
-        : base(data, string.Empty)
+        : base(data)
     {
         TiempoRestante = TiempoAEsperar = segundosAEsperar;
     }
 
-    public PasoEsperar(SateliteData data, float segundosAEsperar, string titulo) : base(data, titulo) {
+    public PasoEsperar(SateliteData data, float segundosAEsperar, LogItem logItem) : base(data) {
         TiempoRestante = TiempoAEsperar = segundosAEsperar;
+        LogItem = logItem;
     }
 
     override public void Ejecutar(float time)

@@ -12,8 +12,6 @@ public class EscalaTemporalUpdater : MonoBehaviour
         var model = GameObject.Find("Model");
         Debug.Assert(model != null, "No se ha encontrado el modelo.");
 
-        var gameManager = (GameManager)model.GetComponent(typeof(GameManager));
-
         tiempo = gameObject.GetComponentInChildren<Text>();
 
         Debug.Assert(tiempo != null, "No se ha encontrado el campo del tiempo");

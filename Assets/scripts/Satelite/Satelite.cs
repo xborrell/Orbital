@@ -18,9 +18,16 @@ public class Satelite
     public float Apoapsis { get { return data.Apoapsis; } }
     public float Periapsis { get { return data.Periapsis; } }
     public float Inclinacion { get { return data.Inclinacion; } }
-    public string Accion { get { return mente.Descripcion; } }
     public SateliteData Data { get { return data; } }
     public MenteSatelite Mente { get { return mente; } }
+
+    public string Accion
+    {
+        get
+        {
+            return Mente.DecisionEnCurso == null ? "Pensando" : Mente.DecisionEnCurso.LogItem.Titulo;
+        }
+    }
 
     public string Actitud
     {
@@ -37,12 +44,12 @@ public class Satelite
         }
     }
 
-    public Satelite( Vector3 posicionInicial, Vector3 velocidadInicial)
+    public Satelite(Vector3 posicionInicial, Vector3 velocidadInicial, GameManager manager)
     {
         data = new SateliteData(posicionInicial, velocidadInicial);
         calculadorMovimiento = new CalculadorMovimiento(data);
         calculadorRotacion = new CalculadorRotacion(data);
-        mente = new MenteSatelite(data);
+        mente = new MenteSatelite(data, manager);
         motor = new MotorSatelite(data);
     }
 

@@ -4,6 +4,7 @@ using System;
 
 public class SateliteData
 {
+    public LogStorage Logger { get; protected set; }
     public Vector3 Velocidad;
     public Vector3 Posicion;
     public Vector3 Orientacion;
@@ -80,12 +81,14 @@ public class SateliteData
 
     public SateliteData(Vector3 posicion, Vector3 velocidad)
     {
+        Logger = new LogStorage();
+
         Velocidad = velocidad;
         Posicion = posicion;
-        
+
         Orientacion = new Vector3(Config.GetRandomValue(1, 10), Config.GetRandomValue(1, 10), Config.GetRandomValue(1, 10));
         Orientacion.Normalize();
-        
+
         Camara = new Vector3(posicion.x, posicion.y, posicion.z);
         Camara.Normalize();
         Camara = Camara * 10;
