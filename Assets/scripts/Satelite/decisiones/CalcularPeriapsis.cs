@@ -19,7 +19,7 @@ public class CalcularPeriapsis : Decision
         DefinirPaso(new PasoTomarAltura(data));
         DefinirPaso(new PasoEsperarPeriapsis(data));
         DefinirPaso(new PasoGenerico(data, new LogItem(1,"Registrant Periapsis"), 
-            x => { 
+            () => { 
                 Data.Periapsis = Data.AlturaDeReferencia; 
                 Data.OrbitaSubiendo = null; 
                 return true; 

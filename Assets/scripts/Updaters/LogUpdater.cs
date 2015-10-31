@@ -33,21 +33,27 @@ public class LogUpdater : MonoBehaviour
             sb.AppendLine(ultimaDecision.LogItem.Descripcion);
         }
 
-        foreach (LogItem logItem in satelite.Data.Logger.Mensajes)
+        try
         {
-            switch (logItem.Level)
+            foreach (LogItem logItem in satelite.Data.Logger.Mensajes)
             {
-                case 0:
-                    sb.Append(logItem.Descripcion);
-                    break;
-                case 1:
-                    sb.AppendFormat("    -{0}", logItem.Descripcion);
-                    break;
-                default:
-                    throw new ArgumentException(string.Format("Nivell de log no previst: {0}", logItem.Level));
-            }
+                switch (logItem.Level)
+                {
+                    case 0:
+                        sb.Append(logItem.Descripcion);
+                        break;
+                    case 1:
+                        sb.AppendFormat("    -{0}", logItem.Descripcion);
+                        break;
+                    default:
+                        throw new ArgumentException(string.Format("Nivell de log no previst: {0}", logItem.Level));
+                }
 
-            sb.AppendLine();
+                sb.AppendLine();
+            }
+        }
+        catch (Exception e)
+        {
         }
 
         campo.text = sb.ToString();

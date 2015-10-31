@@ -10,7 +10,7 @@ public class PasoEnfoqueATierra : Paso
         LogItem = new LogItem( 1, "Orientació terra", "Demanar l'orientació a terra.");
     }
 
-    override public void Ejecutar(float time)
+    override public void Ejecutar()
     {
         Data.ActitudSolicitada = ActitudRotacion.EnfocadoATierra;
 

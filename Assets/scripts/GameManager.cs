@@ -25,6 +25,11 @@ public class GameManager : MonoBehaviour
 
         selector = new SateliteSelector();
         log = new LogStorage();
+        Trace.Instance = new Trace();
+    }
+
+    void OnDestroy() {
+        Trace.Instance.Dispose();
     }
 
     void Start()
@@ -35,6 +40,8 @@ public class GameManager : MonoBehaviour
     void FixedUpdate()
     {
         selector.FixedUpdate();
+
+        Trace.Instance.Save(Time.time, selector.satelite.Data);
     }
 
     public void Pausa()

@@ -13,7 +13,7 @@ public class CalculadorRotacion
         _data = data;
     }
 
-    public void CalcularNuevaRotacion(float deltaTime)
+    public void CalcularNuevaRotacion()
     {
         if (_data.ActitudSolicitada != ActitudRotacion.Ninguna)
         {
@@ -29,7 +29,7 @@ public class CalculadorRotacion
         switch (_data.Actitud)
         {
             case ActitudRotacion.CaidaLibre: break;
-            case ActitudRotacion.Maniobrando: _data.Orientacion = maniobra.CalcularNuevaOrientacion(deltaTime); break;
+            case ActitudRotacion.Maniobrando: _data.Orientacion = maniobra.CalcularNuevaOrientacion(); break;
             case ActitudRotacion.EnfocadoATierra: _data.Orientacion = CalcularOrientacionATierra(); break;
             case ActitudRotacion.Orbital: _data.Orientacion = CalcularOrientacionOrbital(); break;
             default: throw new ArgumentException("Actitud no implementada en CalculadorRotacion2");

@@ -27,7 +27,7 @@ public class MenteSatelite
         ObtieneLaSiguienteDecision();
     }
 
-    internal void Update(float deltaTime)
+    internal void Update()
     {
         if (DecisionEnCurso == null)
             ObtieneLaSiguienteDecision();
@@ -36,7 +36,7 @@ public class MenteSatelite
             FinalizaDecision();
 
         else
-            DecisionEnCurso.Actua(deltaTime);
+            DecisionEnCurso.Actua();
     }
 
     void ObtieneLaSiguienteDecision()

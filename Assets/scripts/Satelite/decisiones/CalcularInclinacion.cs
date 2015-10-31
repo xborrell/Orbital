@@ -21,7 +21,7 @@ public class CalcularInclinacion : Decision
         LogItem = new LogItem(0, "Calc. Inclinació", "Calculant Inclinació");
     }
 
-    bool Calcular(float deltaTime)
+    bool Calcular()
     {
         var conversor = new ConversorOrbital();
         OrbitalElements elementos = conversor.Convertir(Data.Posicion, Data.Velocidad);

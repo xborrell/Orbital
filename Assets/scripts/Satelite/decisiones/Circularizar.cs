@@ -41,7 +41,7 @@ public class Circularizar : Decision
         LogItem = new LogItem( 0, "Orbita circular", "Fer l'orbita circular");
     }
 
-    private bool CambiarVelocidad(float delta)
+    private bool CambiarVelocidad()
     {
         Data.Velocidad.Normalize();
         Data.Velocidad *= nuevaVelocidad;
@@ -56,7 +56,7 @@ public class Circularizar : Decision
         impulsoNecesario = -1;
     }
 
-    bool CalcularValoresDelImpulso(float deltaTime)
+    bool CalcularValoresDelImpulso()
     {
         double radioPeriapsis = Data.Periapsis + Config.EarthRadius;
         double radioApoapsis = Data.Apoapsis + Config.EarthRadius;
@@ -106,7 +106,7 @@ public class Circularizar : Decision
     //    return true;
     //}
 
-    bool ResetearValoresOrbitales(float deltaTime)
+    bool ResetearValoresOrbitales()
     {
         Data.InvalidateOrbitalValues();
         

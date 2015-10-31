@@ -29,7 +29,7 @@ public class CalcularSentidoDeLaOrbita : Decision
         LogItem = new LogItem(0, "Calc. sentit", "Calculant el sentit de l'orbita");
     }
 
-    bool ComprobarSiLaOrbitaSubeOBaja(float deltaTime)
+    bool ComprobarSiLaOrbitaSubeOBaja()
     {
         if ( Data.AlturaDeReferencia > Data.Altura)
         {

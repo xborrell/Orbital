@@ -9,7 +9,7 @@ public class PasoEsperarPeriapsis : Paso
         LogItem = new LogItem( 1, "Esperant Periapsis");
     }
 
-    override public void Ejecutar(float time)
+    override public void Ejecutar()
     {
         if (Data.AlturaDeReferencia < Data.Altura)
         {

@@ -10,7 +10,7 @@ public class PasoEsperarApoapsis : Paso
         LogItem = new LogItem( 1, "Esperant Apoapsis");
     }
 
-    override public void Ejecutar(float time)
+    override public void Ejecutar()
     {
         if (Data.AlturaDeReferencia > Data.Altura)
         {

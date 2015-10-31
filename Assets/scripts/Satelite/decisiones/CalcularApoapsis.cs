@@ -18,7 +18,7 @@ public class CalcularApoapsis : Decision
         DefinirPaso(new PasoTomarAltura(data));
         DefinirPaso(new PasoEsperarApoapsis(data));
         DefinirPaso(new PasoGenerico(data, new LogItem( 1, "Registrant Apoapsis" ),
-            x =>
+            () =>
             {
                 Data.Apoapsis = Data.AlturaDeReferencia;
                 Data.OrbitaSubiendo = null;

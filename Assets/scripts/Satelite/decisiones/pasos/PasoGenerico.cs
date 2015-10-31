@@ -5,18 +5,18 @@ using System.Text;
 
 public class PasoGenerico : Paso
 {
-    public Func<float, bool> Accion { get; protected set; }
+    public Func<bool> Accion { get; protected set; }
 
-    public PasoGenerico(SateliteData data, LogItem logItem, Func<float, bool> paso)
+    public PasoGenerico(SateliteData data, LogItem logItem, Func<bool> paso)
         : base(data)
     {
         Accion = paso;
         LogItem = logItem;
     }
 
-    override public void Ejecutar(float time)
+    override public void Ejecutar()
     {
-        if (Accion(time))
+        if (Accion())
             PasoFinalizado = true;
     }
 }

@@ -39,5 +39,5 @@ abstract public class Paso : ILogable
         PasoFinalizado = false;
     }
 
-    abstract public void Ejecutar(float time);
+    abstract public void Ejecutar();
 }

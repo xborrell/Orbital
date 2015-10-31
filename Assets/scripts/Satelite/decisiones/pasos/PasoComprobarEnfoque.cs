@@ -14,7 +14,7 @@ public class PasoComprobarEnfoque : Paso
         LogItem = new LogItem( 1, "Esperar Orientació", "Esperar l'orientació demanada.");
     }
 
-    override public void Ejecutar(float time)
+    override public void Ejecutar()
     {
         PasoFinalizado = (Data.Actitud == ActitudDeseada);
     }

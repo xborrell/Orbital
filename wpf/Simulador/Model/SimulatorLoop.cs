@@ -6,6 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using CalculadorOrbital;
 using System.Windows.Media.Media3D;
+using satelite.interfaces;
+using satelite.backend;
 
 namespace Xb.Simulador.Model
 {
@@ -13,20 +15,26 @@ namespace Xb.Simulador.Model
     {
         public TimeSpan EllapsedTime { get; protected set; }
         public double AcceleratedTime { get; set; }
-        public Satelite Satelite { get; protected set; }
+        public ISatelite Satelite { get; protected set; }
 
         Task _task;
         CancellationTokenSource _cancelSource;
         const long intervaloFisicoEnTicks = 1000000;
         const long ticksPorSegundo = 10000000;
-        Vector3D posicionInicial = new Vector3D(-822.79774F, -4438.63582F, 5049.31502F);
-        Vector3D velocidadInicial = new Vector3D(7.418175658F, .709253354F, 1.828703177F);
+        Vector posicionInicial;
+        Vector velocidadInicial;
+        float deltaEnSegundos = 0;
+        Constantes constantes;
 
-        public SimulatorLoop()
+        public SimulatorLoop(IToolsFactory factory, Constantes constantes)
         {
             EllapsedTime = new TimeSpan();
             AcceleratedTime = 1;
-            Satelite = new Satelite(posicionInicial, velocidadInicial);
+            posicionInicial = factory.CreateVector(-822.79774F, -4438.63582F, 5049.31502F);
+            velocidadInicial = factory.CreateVector(7.418175658F, .709253354F, 1.828703177F);
+
+            this.constantes = constantes;
+            Satelite = factory.CreateSatelite(posicionInicial, velocidadInicial);
         }
 
         public void Start()
@@ -68,8 +76,14 @@ namespace Xb.Simulador.Model
 
         private void PhysicsUpdate(long deltaEnTicks)
         {
-            float deltaEnSegundos = deltaEnTicks / (float)ticksPorSegundo;
-            Satelite.Update(deltaEnSegundos);
+            deltaEnSegundos += deltaEnTicks / (float)ticksPorSegundo;
+
+            while (deltaEnSegundos >= constantes.FixedDeltaTime)
+            {
+                Satelite.Pulse();
+                deltaEnSegundos -= constantes.FixedDeltaTime;
+            }
+
             EllapsedTime += TimeSpan.FromTicks(deltaEnTicks);
         }
     }

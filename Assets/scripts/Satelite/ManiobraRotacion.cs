@@ -25,13 +25,13 @@ public class ManiobraRotacion
         tiempoParaFinalizarEnSegundos = anguloEnGrados / velocidadAngularEnGradosPorSegundo;
     }
 
-    public Vector3 CalcularNuevaOrientacion(float deltaTime)
+    public Vector3 CalcularNuevaOrientacion()
     {
         Vector3 orientacionCalculada;
 
         if (!ManiobraCompletada)
         {
-            tiempoTranscurridoEnSegundos += deltaTime;
+            tiempoTranscurridoEnSegundos += Time.fixedDeltaTime;
 
             var porcentajeDeRotacion = Math.Min(tiempoTranscurridoEnSegundos / tiempoParaFinalizarEnSegundos, 1);
 

@@ -11,13 +11,13 @@ public class CalculadorMovimiento
         _data = data;
     }
 
-    public void CalcularNuevaPosicion(float deltaTime)
+    public void CalcularNuevaPosicion()
     {
         Vector3 fuerzaGravitatoria = CalcularFuerzaGravitatoria();
         Vector3 aceleracionGravitatoria = fuerzaGravitatoria / Config.SatellitMass;
 
-        _data.Velocidad = _data.Velocidad + (aceleracionGravitatoria * deltaTime);
-        Vector3 desplazamiento = _data.Velocidad * deltaTime;
+        _data.Velocidad = _data.Velocidad + (aceleracionGravitatoria * Time.fixedDeltaTime);
+        Vector3 desplazamiento = _data.Velocidad * Time.fixedDeltaTime;
         _data.Posicion += desplazamiento;
     }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 public class PasoEsperar : Paso
 {
@@ -19,9 +20,9 @@ public class PasoEsperar : Paso
         LogItem = logItem;
     }
 
-    override public void Ejecutar(float time)
+    override public void Ejecutar()
     {
-        TiempoRestante -= time;
+        TiempoRestante -= Time.fixedDeltaTime;
 
         PasoFinalizado = (TiempoRestante < 0);
     }

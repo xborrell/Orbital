@@ -28,8 +28,8 @@ namespace Xb.Simulador.Viewmodel
 
     public class MainWindowViewModel : ObservableObject
     {
-        public string AlturaReal { get { return model.Satelite.Posicion.Length.ToString("0.000 km."); } }
-        public string VelocidadReal { get { return model.Satelite.Velocidad.Length.ToString("0.000 km/s"); } }
+        public string AlturaReal { get { return model.Satelite.Data.Posicion.Magnitude.ToString("0.000 km."); } }
+        public string VelocidadReal { get { return model.Satelite.Data.Velocidad.Magnitude.ToString("0.000 km/s"); } }
 
         public string Altura { get { return ValorOrbital( model.Satelite.Altura, "0.000"); } }
         public string Apoapsis { get { return ValorOrbital( model.Satelite.Apoapsis, "0.000"); } }
@@ -67,18 +67,20 @@ namespace Xb.Simulador.Viewmodel
         string accionGuardada = string.Empty;
         string actitudGuardada = string.Empty;
 
-        SimulatorLoop model = new SimulatorLoop();
+        SimulatorLoop model;
         Timer timer;
         object obj = new object();
         private readonly SynchronizationContext uiContext;
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(SimulatorLoop model)
         {
             Acciones = new ObservableCollection<string>();
             Actitudes = new ObservableCollection<string>();
             uiContext = SynchronizationContext.Current;
 
             timer = new Timer(timer_Elapsed, null, 2000, 300);
+            this.model = model;
+
             model.Start();
         }
 

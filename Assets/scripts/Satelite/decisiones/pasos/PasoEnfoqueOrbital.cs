@@ -11,7 +11,7 @@ public class PasoEnfoqueOrbital : Paso
         LogItem = new LogItem( 1, "Orientació orbital", "Demanar l'orientació orbital.");
     }
 
-    override public void Ejecutar(float time)
+    override public void Ejecutar()
     {
         Data.ActitudSolicitada = ActitudRotacion.Orbital;
 

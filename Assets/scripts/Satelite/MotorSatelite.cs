@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 public class MotorSatelite
 {
     SateliteData data;
-    Action<float> variacionImpulso = null;
+    Action variacionImpulso = null;
 
     public MotorSatelite(SateliteData data)
     {
@@ -34,16 +35,16 @@ public class MotorSatelite
 
         if (cambioDeImpulsoPedido > data.Impulso)
         {
-            variacionImpulso = x => Acelerar(x, cambioDeImpulsoPedido);
+            variacionImpulso = () => Acelerar(cambioDeImpulsoPedido);
         }
 
         if (cambioDeImpulsoPedido < data.Impulso)
         {
-            variacionImpulso = x => Frenar(x, cambioDeImpulsoPedido);
+            variacionImpulso = () => Frenar(cambioDeImpulsoPedido);
         }
     }
 
-    internal void CalcularImpulso(float deltaTime)
+    internal void CalcularImpulso()
     {
         if (data.ImpulsoSolicitado >= 0)
         {
@@ -52,13 +53,13 @@ public class MotorSatelite
 
         if (variacionImpulso != null)
         {
-            variacionImpulso(deltaTime);
+            variacionImpulso();
         }
     }
 
-    void Acelerar(float deltaTime, float aceleracionSolicitada)
+    void Acelerar(float aceleracionSolicitada)
     {
-        var variacion = Config.VariacionMaximaDelImpulso * deltaTime;
+        var variacion = Config.VariacionMaximaDelImpulso * Time.fixedDeltaTime;
 
         data.Impulso += variacion;
 
@@ -69,9 +70,9 @@ public class MotorSatelite
         }
     }
 
-    void Frenar(float deltaTime, float frenadoSolicitado)
+    void Frenar(float frenadoSolicitado)
     {
-        var variacion = Config.VariacionMaximaDelImpulso * deltaTime;
+        var variacion = Config.VariacionMaximaDelImpulso * Time.fixedDeltaTime;
 
         data.Impulso -= variacion;
 

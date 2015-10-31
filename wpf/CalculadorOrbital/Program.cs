@@ -1,9 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
+using Autofac;
+using Autofac.Core;
+using satelite.backend;
+using satelite.backend.log;
+using satelite.backend.orbital;
+using satelite.implementation.wpf;
+using satelite.interfaces;
 
 namespace CalculadorOrbital
 {
@@ -11,31 +18,76 @@ namespace CalculadorOrbital
     {
         static void Main(string[] args)
         {
-            Console.OutputEncoding = System.Text.Encoding.Unicode;
-            ConversorOrbital conversor = new ConversorOrbital();
+            Log.Attach(new ConsoleObserver());
 
-            var posicionInicial = new Vector3D(-822.79774, -4438.63582, 5049.31502);
-            var velocidadInicial = new Vector3D(7.418175658, .709253354, 1.828703177);
-
-            var satelite = new Satelite(posicionInicial, velocidadInicial );
-
-            OrbitalElements elementosIniciales = conversor.Convertir(satelite.Posicion, satelite.Velocidad);
-            double remainTimeInSeconds = elementosIniciales.Period.TotalSeconds;
-            double deltaTimeInSeconds = 0.1;
-
-            while (remainTimeInSeconds > deltaTimeInSeconds)
+            using (var container = InicializarAutofac())
             {
-                satelite.Update((float)deltaTimeInSeconds);
+                ISistema sistema = container.Resolve<ISistema>();
+                sistema.Ejecutar();
+            }
+        }
 
-                OrbitalElements elementosBucle = conversor.Convertir(satelite.Posicion, satelite.Velocidad);
+        private static IEnumerable<Assembly> InicializarModulos()
+        {
+            var assemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
 
-                remainTimeInSeconds -= deltaTimeInSeconds;
+            IList<Assembly> binAssemblies = new List<Assembly>();
+
+            string binFolder = GetAssemblyDirectory();
+
+            IList<string> dllFiles = Directory.GetFiles(binFolder, "*.dll", SearchOption.TopDirectoryOnly).ToList();
+
+            foreach (string dllFile in dllFiles)
+            {
+                AssemblyName assemblyName = AssemblyName.GetAssemblyName(dllFile);
+
+                Assembly locatedAssembly = assemblies.FirstOrDefault(a =>
+                    AssemblyName.ReferenceMatchesDefinition(
+                        a.GetName(), assemblyName));
+
+                if (locatedAssembly == null)
+                {
+                    Assembly assembly = Assembly.LoadFile(dllFile);
+                    assemblies.Add(assembly);
+                }
             }
 
-            Console.WriteLine("Periapsis           {0} Km.", satelite.Periapsis);
-            Console.WriteLine("Apoapsis            {0} Km.", satelite.Apoapsis);
-            Console.WriteLine("Semieje Mayor       {0} Km.", satelite.Data.SemiejeMayor);
-            Console.WriteLine("Velocidad Periapsis {0} Km/s", satelite.Data.VelocidadPeriapsis);
+            return assemblies;
+        }
+
+        private static IContainer InicializarAutofac()
+        {
+            var builder = new ContainerBuilder();
+
+            var assemblies = InicializarModulos();
+
+            var moduleType = typeof(ISateliteModules);
+            var sateliteType = typeof(ISateliteModules);
+            var types = assemblies
+                .SelectMany(a => a.GetTypes())
+                .Where(
+                    t => t.IsClass 
+                 && !t.IsAbstract 
+                 && moduleType.IsAssignableFrom(t)
+                 && sateliteType.IsAssignableFrom(t)
+                 );
+
+            foreach (var tipo in types)
+            {
+                var module = (IModule)Activator.CreateInstance(tipo);
+                builder.RegisterModule(module);
+            }
+            builder.RegisterType<Sistema>().As<ISistema>();
+
+            return builder.Build();
+        }
+
+        public static string GetAssemblyDirectory()
+        {
+            string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+            UriBuilder uri = new UriBuilder(codeBase);
+            string path = Uri.UnescapeDataString(uri.Path);
+            return Path.GetDirectoryName(path);
         }
     }
 }

@@ -71,7 +71,7 @@ abstract public class Decision : ILogable
         DefinicionDePasos.Add(paso);
     }
 
-    public void Actua(float deltaTime)
+    public void Actua()
     {
         while (pasosAEjecutar[0].PasoFinalizado)
         {
@@ -89,7 +89,7 @@ abstract public class Decision : ILogable
                 Data.Logger.Informar(pasosAEjecutar[0]);
         }
 
-        pasosAEjecutar[0].Ejecutar(deltaTime);
+        pasosAEjecutar[0].Ejecutar();
 
         var segundosAEsperar = pasosAEjecutar[0].SegundosAEsperar;
 
